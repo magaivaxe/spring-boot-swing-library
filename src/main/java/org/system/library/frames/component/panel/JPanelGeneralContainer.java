@@ -36,20 +36,23 @@ public class JPanelGeneralContainer implements IJComponentContainer {
   @Override
   public void addToIndexedContainer(String name, Dimension dimension, ComponentPosition position, IJComponentType type) {
     var panel = JPanelComponentType.buildByType(name, (JPanelComponentType) type);
+    var panelIndexed = JComponentIndexed.builder().component(panel).position(position).build();
+    panelsIndexed.put(name, panelIndexed);
   }
 
   @Override
   public void addToContainer(String name, Dimension dimension, IJComponentType type) {
-
+    var panel = JPanelComponentType.buildByType(name, (JPanelComponentType) type);
+    panels.put(name, panel);
   }
 
   @Override
   public JPanelGeneral getComponentFromIndexedContainer(String name) {
-    return null;
+    return (JPanelGeneral) panelsIndexed.get(name).getJComponent();
   }
 
   @Override
   public JPanelGeneral getComponentFromContainer(String name) {
-    return null;
+    return panels.get(name);
   }
 }

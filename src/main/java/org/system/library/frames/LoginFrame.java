@@ -4,6 +4,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
+import org.system.library.frames.component.panel.JPanelComponentType;
+import org.system.library.frames.component.panel.JPanelGeneralContainer;
 import org.system.library.frames.menubar.factory.JMenuBarFactory;
 import org.system.library.frames.menubar.factory.JMenuBarTypeBuilder;
 import org.system.library.frames.component.panel.JPanelGeneral;
@@ -29,21 +31,16 @@ public class LoginFrame extends JFrame implements IJFrame {
   private final JTextComponentContainer textComponentContainer;
   private final JLabelContainer labelContainer;
   private final JButtonComponentContainer buttonContainer;
-  private final JPanelGeneral panelBody;
-  private final JPanelGeneral panelHeader;
-  private final JPanelGeneral panelFooter;
+  private final JPanelGeneralContainer panelContainer;
 
   public LoginFrame(MessageLibrary message, JMenuBarFactory menuBarFactory, JTextComponentContainer textFieldContainer,
-                    JLabelContainer labelContainer, JButtonComponentContainer buttonContainer, JPanelGeneral panelBody,
-                    JPanelGeneral panelHeader, JPanelGeneral panelFooter) {
+                    JLabelContainer labelContainer, JButtonComponentContainer buttonContainer, JPanelGeneralContainer panelContainer) {
     this.message = message;
     this.menuBarFactory = menuBarFactory;
     this.textComponentContainer = textFieldContainer;
     this.labelContainer = labelContainer;
     this.buttonContainer = buttonContainer;
-    this.panelBody = panelBody;
-    this.panelHeader = panelHeader;
-    this.panelFooter = panelFooter;
+    this.panelContainer = panelContainer;
     build();
   }
 
@@ -64,7 +61,8 @@ public class LoginFrame extends JFrame implements IJFrame {
   }
 
   private void buildHeaderLayoutPanel() {
-    panelHeader.setLayout(new FlowLayout());
+    panelContainer.addToContainer("panelHeader", null, JPanelComponentType.FLOW_LAYOUT);
+    var panelHeader = panelContainer.getComponentFromContainer("panelHeader");
     panelHeader.add(labelContainer.getComponentFromContainer("loginframe.panel.title"));
     panelHeader.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
     panelHeader.setBorder(new EmptyBorder(DEFAULT_PADDING, 0, 0, 0));
@@ -80,19 +78,21 @@ public class LoginFrame extends JFrame implements IJFrame {
   }
 
   private void buildFooterLayoutPanel() {
-    panelFooter.setLayout(new FlowLayout());
+    panelContainer.addToContainer("panelFooter", null, JPanelComponentType.FLOW_LAYOUT);
+    var panelFooter = panelContainer.getComponentFromContainer("panelFooter");
     panelFooter.add(buttonContainer.getComponentFromContainer("loginframe.button.connect"));
     panelFooter.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
   }
 
   private void buildBodyPanel() {
-    panelBody.setLayout(new SpringLayout());
-    setTextFieldsBodyPanel();
-    setLabelsBodyPanel();
+    panelContainer.addToContainer("panelBody", null, JPanelComponentType.SPRING_LAYOUT);
+    buildTextFieldsBodyPanel();
+    buildLabelsBodyPanel();
     buildBodyLayoutPanel();
   }
 
   private void buildBodyLayoutPanel() {
+    var panelBody = panelContainer.getComponentFromContainer("panelBody");
     panelBody.addComponentsByPanePosition(
       textComponentContainer.getJComponentsIndexed(),
       labelContainer.getJComponentsIndexed(),
@@ -101,13 +101,13 @@ public class LoginFrame extends JFrame implements IJFrame {
     SpringUtilities.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING, DEFAULT_PADDING);
   }
 
-  private void setLabelsBodyPanel() {
+  private void buildLabelsBodyPanel() {
     labelContainer.addToIndexedContainer("application.user", null, ComponentPosition.ONE, JLabelComponentType.LABEL);
     labelContainer.addToIndexedContainer("application.password", null, ComponentPosition.THREE, JLabelComponentType.LABEL);
     labelContainer.setLabelFor(textComponentContainer.getJComponentsNotIndexedFromIndexed());
   }
 
-  private void setTextFieldsBodyPanel() {
+  private void buildTextFieldsBodyPanel() {
     textComponentContainer.addToIndexedContainer("user", LOGIN_TEXT_FIELD_DIMENSION, ComponentPosition.TWO, JTextComponentType.TEXT_FIELD);
     textComponentContainer.addToIndexedContainer("password", LOGIN_TEXT_FIELD_DIMENSION, ComponentPosition.FOUR, JTextComponentType.PASSWORD_FIELD);
   }
@@ -126,9 +126,9 @@ public class LoginFrame extends JFrame implements IJFrame {
     setSize(SMALL_FRAME_DIMENSION);
     setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 
-    add(panelHeader);
-    add(panelBody);
-    add(panelFooter);
+    add(panelContainer.getComponentFromContainer("panelHeader"));
+    add(panelContainer.getComponentFromContainer("panelBody"));
+    add(panelContainer.getComponentFromContainer("panelFooter"));
   }
 
 
