@@ -1,35 +1,7 @@
 package org.system.library.utils;
 
-/*
- * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- *   - Neither the name of Oracle or the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,130 +14,116 @@ import java.util.stream.IntStream;
  * These utilities are used by several programs, such as
  * SpringBox and SpringCompactGrid.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SpringUtilities {
-  /**
-   * A debugging utility that prints to stdout the component's
-   * minimum, preferred, and maximum sizes.
-   */
-  public static void printSizes(Component c) {
-    System.out.println("minimumSize = " + c.getMinimumSize());
-    System.out.println("preferredSize = " + c.getPreferredSize());
-    System.out.println("maximumSize = " + c.getMaximumSize());
-  }
+
+  private static final int FIRST_CELL = 0;
+  private static final int SECOND_CELL = 1;
 
   /**
-   * Aligns the first <code>rows</code> * <code>cols</code>
-   * components of <code>parent</code> in
-   * a grid. Each component is as big as the maximum
-   * preferred width and height of the components.
-   * The parent is made just big enough to fit them all.
+   * Aligns the first {@code rows} * {@code cols} components of {@code parent} in a grid. Each component is as big as
+   * the maximum preferred width and height of the components. The parent is made just big enough to fit them all.
    *
-   * @param rows     number of rows
-   * @param cols     number of columns
-   * @param initialX x location to start the grid at
-   * @param initialY y location to start the grid at
-   * @param xPad     x padding between cells
-   * @param yPad     y padding between cells
+   * @param parent        container using SpringLayout
+   * @param numberRows    number of grid rows
+   * @param numberColumns number of grid columns
+   * @param xOrigin       x location to start the grid at
+   * @param yOrigin       y location to start the grid at
+   * @param xPadding      x padding between cells
+   * @param yPadding      y padding between cells
    */
   public static void makeGrid(Container parent,
-                              int rows, int cols,
-                              int initialX, int initialY,
-                              int xPad, int yPad) {
-    SpringLayout layout;
-    try {
-      layout = (SpringLayout) parent.getLayout();
-    } catch (ClassCastException exc) {
-      System.err.println("The first argument to makeGrid must use SpringLayout.");
+                              int numberRows, int numberColumns,
+                              int xOrigin, int yOrigin,
+                              int xPadding, int yPadding) {
+
+    if (!(parent.getLayout() instanceof SpringLayout)) {
+      System.err.println("The parent container must use SpringLayout.");
       return;
     }
 
-    Spring xPadSpring = Spring.constant(xPad);
-    Spring yPadSpring = Spring.constant(yPad);
-    Spring initialXSpring = Spring.constant(initialX);
-    Spring initialYSpring = Spring.constant(initialY);
-    int max = rows * cols;
+    var layout = (SpringLayout) parent.getLayout();
+    var xPadSpring = Spring.constant(xPadding);
+    var yPadSpring = Spring.constant(yPadding);
+    var initialXSpring = Spring.constant(xOrigin);
+    var initialYSpring = Spring.constant(yOrigin);
+    var totalCells = numberRows * numberColumns;
 
-    //Calculate Springs that are the max of the width/height so that all
-    //cells have the same size.
-    Spring maxWidthSpring = layout.getConstraints(parent.getComponent(0)).
-      getWidth();
-    Spring maxHeightSpring = layout.getConstraints(parent.getComponent(0)).
-      getHeight();
-    for (int i = 1; i < max; i++) {
-      SpringLayout.Constraints cons = layout.getConstraints(
-        parent.getComponent(i));
+    //Calculate the max of width and height.
+    var maxWidthAtomic = new AtomicReference<>(layout.getConstraints(parent.getComponent(FIRST_CELL)).getWidth());
+    var maxHeightAtomic = new AtomicReference<>(layout.getConstraints(parent.getComponent(FIRST_CELL)).getHeight());
+    IntStream.range(SECOND_CELL, totalCells).forEach(cell -> {
+      var constraint = layout.getConstraints(parent.getComponent(cell));
 
-      maxWidthSpring = Spring.max(maxWidthSpring, cons.getWidth());
-      maxHeightSpring = Spring.max(maxHeightSpring, cons.getHeight());
-    }
+      maxWidthAtomic.set(Spring.max(maxWidthAtomic.get(), constraint.getWidth()));
+      maxHeightAtomic.set(Spring.max(maxHeightAtomic.get(), constraint.getHeight()));
+    });
 
-    //Apply the new width/height Spring. This forces all the
-    //components to have the same size.
-    for (int i = 0; i < max; i++) {
-      SpringLayout.Constraints cons = layout.getConstraints(
-        parent.getComponent(i));
+    // apply the same width and height to all cells
+    IntStream.range(FIRST_CELL, totalCells).forEach(cell -> {
+      var constraint = layout.getConstraints(parent.getComponent(cell));
 
-      cons.setWidth(maxWidthSpring);
-      cons.setHeight(maxHeightSpring);
-    }
+      constraint.setWidth(maxWidthAtomic.get());
+      constraint.setHeight(maxHeightAtomic.get());
+    });
 
-    //Then adjust the x/y constraints of all the cells so that they
-    //are aligned in a grid.
-    SpringLayout.Constraints lastCons = null;
-    SpringLayout.Constraints lastRowCons = null;
-    for (int i = 0; i < max; i++) {
-      SpringLayout.Constraints cons = layout.getConstraints(
-        parent.getComponent(i));
-      if (i % cols == 0) { //start of new row
-        lastRowCons = lastCons;
-        cons.setX(initialXSpring);
-      } else { //x position depends on previous component
-        cons.setX(Spring.sum(lastCons.getConstraint(SpringLayout.EAST),
-          xPadSpring));
+    var lastCellConstraint = new AtomicReference<>(new SpringLayout.Constraints());
+    var lastRowConstraint = new AtomicReference<>(new SpringLayout.Constraints());
+
+    // Adjust x and y constraints on all cells
+    IntStream.range(FIRST_CELL, totalCells).forEach(cell -> {
+      var currentConstraint = layout.getConstraints(parent.getComponent(cell));
+
+      if (isNewRow(cell, numberColumns)) {
+        lastRowConstraint.set(lastCellConstraint.get());
+        currentConstraint.setX(initialXSpring);
+      } else { // x position depends on previous component
+        currentConstraint.setX(Spring.sum(lastCellConstraint.get().getConstraint(SpringLayout.EAST), xPadSpring));
       }
 
-      if (i / cols == 0) { //first row
-        cons.setY(initialYSpring);
-      } else { //y position depends on previous row
-        cons.setY(Spring.sum(lastRowCons.getConstraint(SpringLayout.SOUTH),
-          yPadSpring));
+      if (isFirstRow(cell, numberColumns)) {
+        currentConstraint.setY(initialYSpring);
+      } else { // y position depends on previous row
+        currentConstraint.setY(Spring.sum(lastRowConstraint.get().getConstraint(SpringLayout.SOUTH), yPadSpring));
       }
-      lastCons = cons;
-    }
+      lastCellConstraint.set(currentConstraint);
+    });
 
-    //Set the parent's size.
-    SpringLayout.Constraints pCons = layout.getConstraints(parent);
-    pCons.setConstraint(SpringLayout.SOUTH,
-      Spring.sum(
-        Spring.constant(yPad),
-        lastCons.getConstraint(SpringLayout.SOUTH)));
-    pCons.setConstraint(SpringLayout.EAST,
-      Spring.sum(
-        Spring.constant(xPad),
-        lastCons.getConstraint(SpringLayout.EAST)));
+    // Set the parent's size by sum of padding + last point(east, south)
+    var parentConstraint = layout.getConstraints(parent);
+    parentConstraint.setConstraint(SpringLayout.SOUTH,
+      Spring.sum(yPadSpring, lastCellConstraint.get().getConstraint(SpringLayout.SOUTH)));
+    parentConstraint.setConstraint(SpringLayout.EAST,
+      Spring.sum(xPadSpring, lastCellConstraint.get().getConstraint(SpringLayout.EAST)));
   }
 
-  /* Used by makeCompactGrid. */
-  private static SpringLayout.Constraints getConstraintsForCell(
-    int row, int col,
-    Container parent,
-    int cols) {
-    SpringLayout layout = (SpringLayout) parent.getLayout();
-    Component c = parent.getComponent(row * cols + col);
-    return layout.getConstraints(c);
+  private static boolean isFirstRow(int cell, int numberColumns) {
+    return cell / numberColumns == 0;
+  }
+
+  private static boolean isNewRow(int cell, int numberColumns) {
+    return cell % numberColumns == 0;
+  }
+
+  private static SpringLayout.Constraints getConstraintsForCell(int currentRow, int currentColumn, Container parent,
+                                                                int numberColumns) {
+    var layout = (SpringLayout) parent.getLayout();
+    Component component = parent.getComponent(getCurrentGridPosition(currentRow, currentColumn, numberColumns));
+    return layout.getConstraints(component);
+  }
+
+  private static int getCurrentGridPosition(int currentRow, int currentColumn, int numberColumns) {
+    return currentRow * numberColumns + currentColumn;
   }
 
   /**
-   * Aligns the first <code>rows</code> * <code>cols</code>
-   * components of <code>parent</code> in
-   * a grid. Each component in a column is as wide as the maximum
-   * preferred width of the components in that column;
-   * height is similarly determined for each row.
+   * Aligns the first {@code rows} * {@code cols} components of {@code parent} in a grid. Each component in a column is
+   * as wide as the maximum preferred width of the components in that column. Height is similarly determined for each row.
    * The parent is made just big enough to fit them all.
    *
    * @param parent        container using SpringLayout
-   * @param numberRows    number of rows
-   * @param numberColumns number of columns
+   * @param numberRows    number of grid rows
+   * @param numberColumns number of grid columns
    * @param xOrigin       x location to start the grid at
    * @param yOrigin       y location to start the grid at
    * @param xPadding      x padding between cells
@@ -227,7 +185,7 @@ public class SpringUtilities {
       yOriginAtomic.set(Spring.sum(yOriginAtomic.get(), Spring.sum(heightAtomic.get(), Spring.constant(yPadding))));
     });
 
-    //Set the parent's size.
+    // Set the parent's size by sum of origins cells
     SpringLayout.Constraints parentConstraint = layout.getConstraints(parent);
     parentConstraint.setConstraint(SpringLayout.SOUTH, yOriginAtomic.get());
     parentConstraint.setConstraint(SpringLayout.EAST, xOriginAtomic.get());

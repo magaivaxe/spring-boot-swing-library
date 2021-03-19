@@ -90,18 +90,23 @@ public class LoginFrame extends JFrame implements IJFrame {
       labelContainer.getJComponentsIndexed(),
       buttonContainer.getJComponentsIndexed()
     );
-    SpringUtilities.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING, DEFAULT_PADDING);
+    SpringUtilities.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING,
+      DEFAULT_PADDING);
   }
 
   private void buildLabelsBodyPanel() {
-    labelContainer.addToIndexedContainer("application.user", null, ComponentPosition.ONE, JLabelComponentType.LABEL);
-    labelContainer.addToIndexedContainer("application.password", null, ComponentPosition.THREE, JLabelComponentType.LABEL);
+    labelContainer.addToIndexedContainer("application.user", null, ComponentPosition.ONE,
+      JLabelComponentType.LABEL);
+    labelContainer.addToIndexedContainer("application.password", null, ComponentPosition.THREE,
+      JLabelComponentType.LABEL);
     labelContainer.setLabelFor(textComponentContainer.getJComponentsNotIndexedFromIndexed());
   }
 
   private void buildTextFieldsBodyPanel() {
-    textComponentContainer.addToIndexedContainer("user", LOGIN_TEXT_FIELD_DIMENSION, ComponentPosition.TWO, JTextComponentType.TEXT_FIELD);
-    textComponentContainer.addToIndexedContainer("password", LOGIN_TEXT_FIELD_DIMENSION, ComponentPosition.FOUR, JTextComponentType.PASSWORD_FIELD);
+    textComponentContainer.addToIndexedContainer("user", LOGIN_TEXT_FIELD_DIMENSION, ComponentPosition.TWO,
+      JTextComponentType.TEXT_FIELD);
+    textComponentContainer.addToIndexedContainer("password", LOGIN_TEXT_FIELD_DIMENSION, ComponentPosition.FOUR,
+      JTextComponentType.PASSWORD_FIELD);
   }
 
   private void buildFrame() {
