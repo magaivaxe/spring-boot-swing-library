@@ -33,6 +33,8 @@ package org.system.library.utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 /**
  * A 1.4 file that provides utility methods for
@@ -161,64 +163,73 @@ public class SpringUtilities {
    * height is similarly determined for each row.
    * The parent is made just big enough to fit them all.
    *
-   * @param rows     number of rows
-   * @param cols     number of columns
-   * @param initialX x location to start the grid at
-   * @param initialY y location to start the grid at
-   * @param xPad     x padding between cells
-   * @param yPad     y padding between cells
+   * @param parent        container using SpringLayout
+   * @param numberRows    number of rows
+   * @param numberColumns number of columns
+   * @param xOrigin       x location to start the grid at
+   * @param yOrigin       y location to start the grid at
+   * @param xPadding      x padding between cells
+   * @param yPadding      y padding between cells
    */
   public static void makeCompactGrid(Container parent,
-                                     int rows, int cols,
-                                     int initialX, int initialY,
-                                     int xPad, int yPad) {
-    SpringLayout layout;
-    try {
-      layout = (SpringLayout) parent.getLayout();
-    } catch (ClassCastException exc) {
-      System.err.println("The first argument to makeCompactGrid must use SpringLayout.");
+                                     int numberRows, int numberColumns,
+                                     int xOrigin, int yOrigin,
+                                     int xPadding, int yPadding) {
+
+    if (!(parent.getLayout() instanceof SpringLayout)) {
+      System.err.println("The parent container must use SpringLayout.");
       return;
     }
 
+    var layout = (SpringLayout) parent.getLayout();
+
     //Align all cells in each column and make them the same width.
-    Spring x = Spring.constant(initialX);
-    for (int c = 0; c < cols; c++) {
-      Spring width = Spring.constant(0);
-      for (int r = 0; r < rows; r++) {
-        width = Spring.max(width,
-          getConstraintsForCell(r, c, parent, cols).
-            getWidth());
-      }
-      for (int r = 0; r < rows; r++) {
-        SpringLayout.Constraints constraints =
-          getConstraintsForCell(r, c, parent, cols);
-        constraints.setX(x);
-        constraints.setWidth(width);
-      }
-      x = Spring.sum(x, Spring.sum(width, Spring.constant(xPad)));
-    }
+    var xOriginAtomic = new AtomicReference<>(Spring.constant(xOrigin));
+    IntStream.range(0, numberColumns).forEach(currentColumn -> {
+      var widthAtomic = new AtomicReference<>(Spring.constant(0));
+
+      // Grid with calculus
+      IntStream.range(0, numberRows).forEach(currentRow -> {
+        widthAtomic.set(Spring.max(widthAtomic.get(),
+          getConstraintsForCell(currentRow, currentColumn, parent, numberColumns).getWidth()));
+      });
+
+      // Compose and set rows constraints
+      IntStream.range(0, numberRows).forEach(currentRow -> {
+        var constraintRow = getConstraintsForCell(currentRow, currentColumn, parent, numberColumns);
+        constraintRow.setX(xOriginAtomic.get());
+        constraintRow.setWidth(widthAtomic.get());
+      });
+
+      // Set new xOrigin to next cell
+      xOriginAtomic.set(Spring.sum(xOriginAtomic.get(), Spring.sum(widthAtomic.get(), Spring.constant(xPadding))));
+    });
 
     //Align all cells in each row and make them the same height.
-    Spring y = Spring.constant(initialY);
-    for (int r = 0; r < rows; r++) {
-      Spring height = Spring.constant(0);
-      for (int c = 0; c < cols; c++) {
-        height = Spring.max(height,
-          getConstraintsForCell(r, c, parent, cols).
-            getHeight());
-      }
-      for (int c = 0; c < cols; c++) {
-        SpringLayout.Constraints constraints =
-          getConstraintsForCell(r, c, parent, cols);
-        constraints.setY(y);
-        constraints.setHeight(height);
-      }
-      y = Spring.sum(y, Spring.sum(height, Spring.constant(yPad)));
-    }
+    var yOriginAtomic = new AtomicReference<>(Spring.constant(yOrigin));
+    IntStream.range(0, numberRows).forEach(currentRow -> {
+      var heightAtomic = new AtomicReference<>(Spring.constant(0));
+
+      // Grid height calculus
+      IntStream.range(0, numberColumns).forEach(currentColumn -> {
+        heightAtomic.set(Spring.max(heightAtomic.get(),
+          getConstraintsForCell(currentRow, currentColumn, parent, numberColumns).getHeight()));
+      });
+
+      // Compose and set columns constraints
+      IntStream.range(0, numberColumns).forEach(currentColumn -> {
+        var constraintColumn = getConstraintsForCell(currentRow, currentColumn, parent, numberColumns);
+        constraintColumn.setY(yOriginAtomic.get());
+        constraintColumn.setHeight(heightAtomic.get());
+      });
+
+      // Set new yOrigin to next cell
+      yOriginAtomic.set(Spring.sum(yOriginAtomic.get(), Spring.sum(heightAtomic.get(), Spring.constant(yPadding))));
+    });
 
     //Set the parent's size.
-    SpringLayout.Constraints pCons = layout.getConstraints(parent);
-    pCons.setConstraint(SpringLayout.SOUTH, y);
-    pCons.setConstraint(SpringLayout.EAST, x);
+    SpringLayout.Constraints parentConstraint = layout.getConstraints(parent);
+    parentConstraint.setConstraint(SpringLayout.SOUTH, yOriginAtomic.get());
+    parentConstraint.setConstraint(SpringLayout.EAST, xOriginAtomic.get());
   }
 }

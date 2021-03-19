@@ -1,27 +1,29 @@
 package org.system.library.frames;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
+import org.system.library.frames.component.ComponentPosition;
 import org.system.library.frames.component.panel.JPanelComponentType;
 import org.system.library.frames.component.panel.JPanelGeneralContainer;
-import org.system.library.frames.menubar.factory.JMenuBarFactory;
-import org.system.library.frames.menubar.factory.JMenuBarTypeBuilder;
-import org.system.library.frames.component.panel.JPanelGeneral;
-import org.system.library.frames.component.ComponentPosition;
-import org.system.library.frames.component.panel.button.JButtonComponentType;
 import org.system.library.frames.component.panel.button.JButtonComponentContainer;
+import org.system.library.frames.component.panel.button.JButtonComponentType;
 import org.system.library.frames.component.panel.label.JLabelComponentType;
 import org.system.library.frames.component.panel.label.JLabelContainer;
 import org.system.library.frames.component.panel.text.JTextComponentContainer;
 import org.system.library.frames.component.panel.text.JTextComponentType;
+import org.system.library.frames.menubar.factory.JMenuBarFactory;
+import org.system.library.frames.menubar.factory.JMenuBarTypeBuilder;
 import org.system.library.utils.SpringUtilities;
 
+import javax.annotation.PostConstruct;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+@RequiredArgsConstructor
 @Component
 @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
 public class LoginFrame extends JFrame implements IJFrame {
@@ -33,17 +35,7 @@ public class LoginFrame extends JFrame implements IJFrame {
   private final JButtonComponentContainer buttonContainer;
   private final JPanelGeneralContainer panelContainer;
 
-  public LoginFrame(MessageLibrary message, JMenuBarFactory menuBarFactory, JTextComponentContainer textFieldContainer,
-                    JLabelContainer labelContainer, JButtonComponentContainer buttonContainer, JPanelGeneralContainer panelContainer) {
-    this.message = message;
-    this.menuBarFactory = menuBarFactory;
-    this.textComponentContainer = textFieldContainer;
-    this.labelContainer = labelContainer;
-    this.buttonContainer = buttonContainer;
-    this.panelContainer = panelContainer;
-    build();
-  }
-
+  @PostConstruct
   private void build() {
     buildHeaderPanel();
     buildFooterPanel();
