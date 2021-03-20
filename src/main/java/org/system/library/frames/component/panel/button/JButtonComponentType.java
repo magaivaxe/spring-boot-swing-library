@@ -5,6 +5,13 @@ import org.system.library.frames.component.IJComponentType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum JButtonComponentType implements IJComponentType {
 
@@ -31,11 +38,30 @@ public enum JButtonComponentType implements IJComponentType {
     button.setHorizontalAlignment(SwingConstants.CENTER);
     button.setForeground(IJFrame.LINK_UNVISITED);
     button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    button.addMouseListener(new DefaultMouseHyperLinkListener());
   }
 
   abstract public AbstractButton buildJButtonComponent(String text, Dimension dimension);
 
   public static AbstractButton buildByType(String text, Dimension dimension, JButtonComponentType type) {
     return type.buildJButtonComponent(text, dimension);
+  }
+}
+
+class DefaultMouseHyperLinkListener extends MouseAdapter {
+
+  private Font fontOriginal;
+
+  @Override
+  public void mouseEntered(MouseEvent event) {
+    fontOriginal = event.getComponent().getFont();
+    Map attributes = fontOriginal.getAttributes();
+    attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+    event.getComponent().setFont(fontOriginal.deriveFont(attributes));
+  }
+
+  @Override
+  public void mouseExited(MouseEvent event) {
+    event.getComponent().setFont(fontOriginal);
   }
 }
