@@ -9,10 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 /**
- * A 1.4 file that provides utility methods for
- * creating form- or grid-style layouts with SpringLayout.
- * These utilities are used by several programs, such as
- * SpringBox and SpringCompactGrid.
+ * provides utility methods for creating form- or grid-style layouts with SpringLayout.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SpringUtilities {
@@ -189,5 +186,6 @@ public class SpringUtilities {
     SpringLayout.Constraints parentConstraint = layout.getConstraints(parent);
     parentConstraint.setConstraint(SpringLayout.SOUTH, yOriginAtomic.get());
     parentConstraint.setConstraint(SpringLayout.EAST, xOriginAtomic.get());
+    parent.setSize(xOriginAtomic.get().getValue(), yOriginAtomic.get().getValue());
   }
 }

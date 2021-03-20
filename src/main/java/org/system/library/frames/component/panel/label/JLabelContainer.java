@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
-import org.system.library.frames.component.ComponentPosition;
+import org.system.library.frames.component.Position;
 import org.system.library.frames.component.IJComponentContainer;
 import org.system.library.frames.component.IJComponentType;
 import org.system.library.frames.component.indexed.IJComponentIndexed;
@@ -35,11 +35,11 @@ public class JLabelContainer implements IJComponentContainer {
   @Override
   public Map<String, JLabel> getJComponentsNotIndexedFromIndexed() {
     return labelsIndexed.entrySet().stream()
-      .collect(Collectors.toMap(Map.Entry::getKey, entry -> (JLabel) entry.getValue().getJComponent()));
+      .collect(Collectors.toMap(Map.Entry::getKey, entry -> (JLabel) entry.getValue().getComponent()));
   }
 
   @Override
-  public void addToIndexedContainer(String property, Dimension dimension, ComponentPosition position, IJComponentType type) {
+  public void addToIndexedContainer(String property, Dimension dimension, Position position, IJComponentType type) {
     var text = messageLibrary.getMessage(property);
     var label = JLabelComponentType.buildByType(text, (JLabelComponentType) type);
     var labelIndexed = JComponentIndexed.builder().component(label).position(position).build();
@@ -55,7 +55,7 @@ public class JLabelContainer implements IJComponentContainer {
 
   @Override
   public JLabel getComponentFromIndexedContainer(String property) {
-    return (JLabel) labelsIndexed.get(property).getJComponent();
+    return (JLabel) labelsIndexed.get(property).getComponent();
   }
 
   @Override
@@ -66,7 +66,7 @@ public class JLabelContainer implements IJComponentContainer {
   public void setLabelFor(Map<String, ? extends JComponent> mapComponents) {
     labelsIndexed.forEach((name, labelIdexed) -> {
       if (mapComponents.containsKey(name)) {
-        var label = (JLabel) labelIdexed.getJComponent();
+        var label = (JLabel) labelIdexed.getComponent();
         label.setLabelFor(mapComponents.get(name));
       }
     });

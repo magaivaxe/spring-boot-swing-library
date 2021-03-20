@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
-import org.system.library.frames.component.ComponentPosition;
+import org.system.library.frames.component.Position;
 import org.system.library.frames.component.IJComponentContainer;
 import org.system.library.frames.component.IJComponentType;
 import org.system.library.frames.component.indexed.IJComponentIndexed;
@@ -31,7 +31,7 @@ public class JTextComponentContainer implements IJComponentContainer {
   @Override
   public Map<String, JComponent> getJComponentsNotIndexedFromIndexed() {
     return textComponentsIndexed.entrySet()
-      .stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getJComponent()));
+      .stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getComponent()));
   }
 
   @Override
@@ -40,7 +40,7 @@ public class JTextComponentContainer implements IJComponentContainer {
   }
 
   @Override
-  public void addToIndexedContainer(String name, Dimension dimension, ComponentPosition position, IJComponentType type) {
+  public void addToIndexedContainer(String name, Dimension dimension, Position position, IJComponentType type) {
     var textComponent = JTextComponentType.buildByType(name, dimension, (JTextComponentType) type);
     var textFieldIndexed = JComponentIndexed.builder()
       .component(textComponent)
@@ -56,7 +56,7 @@ public class JTextComponentContainer implements IJComponentContainer {
 
   @Override
   public JComponent getComponentFromIndexedContainer(String name) {
-    return textComponentsIndexed.get(name).getJComponent();
+    return textComponentsIndexed.get(name).getComponent();
   }
 
   @Override
@@ -65,7 +65,7 @@ public class JTextComponentContainer implements IJComponentContainer {
   }
 
   public void setToolTipMessage(String property, String nameTextfield) {
-    textComponentsIndexed.get(nameTextfield).getJComponent()
+    textComponentsIndexed.get(nameTextfield).getComponent()
       .setToolTipText(messageLibrary.getMessage(property));
   }
 

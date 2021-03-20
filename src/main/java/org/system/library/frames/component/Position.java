@@ -1,6 +1,6 @@
 package org.system.library.frames.component;
 
-public enum ComponentPosition {
+public enum Position {
   ONE,
   TWO,
   THREE,

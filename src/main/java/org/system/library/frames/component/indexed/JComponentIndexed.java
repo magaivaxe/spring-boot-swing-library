@@ -1,22 +1,22 @@
 package org.system.library.frames.component.indexed;
 
 import lombok.Builder;
-import org.system.library.frames.component.ComponentPosition;
+import org.system.library.frames.component.Position;
 
 import javax.swing.*;
 
 @Builder
 public class JComponentIndexed implements IJComponentIndexed {
   private final JComponent component;
-  private final ComponentPosition position;
+  private final Position position;
 
   @Override
-  public JComponent getJComponent() {
+  public JComponent getComponent() {
     return component;
   }
 
   @Override
-  public ComponentPosition getPanePosition() {
+  public Position getPosition() {
     return position;
   }
 }

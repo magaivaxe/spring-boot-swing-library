@@ -13,7 +13,7 @@ public interface IJComponentContainer {
 
   List<IJComponentIndexed> getJComponentsIndexed();
 
-  void addToIndexedContainer(String property, Dimension dimension, ComponentPosition position, IJComponentType type);
+  void addToIndexedContainer(String property, Dimension dimension, Position position, IJComponentType type);
 
   void addToContainer(String property, Dimension dimension, IJComponentType type);
 

@@ -1,12 +1,12 @@
 package org.system.library.frames.component.indexed;
 
-import org.system.library.frames.component.ComponentPosition;
+import org.system.library.frames.component.Position;
 
 import javax.swing.*;
 
 public interface IJComponentIndexed {
 
-  JComponent getJComponent();
+  JComponent getComponent();
 
-  ComponentPosition getPanePosition();
+  Position getPosition();
 }
