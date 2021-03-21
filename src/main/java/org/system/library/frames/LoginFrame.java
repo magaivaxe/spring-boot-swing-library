@@ -21,6 +21,8 @@ import org.system.library.utils.SpringUtilities;
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -52,13 +54,13 @@ public class LoginFrame extends JFrame implements IJFrame {
   }
 
   private void setComponentsHeaderPanel() {
-    panelContainer.addToIndexedContainer("panelHeader", HEADER_DIMENSION, Position.ONE, JPanelComponentType.FLOW_LAYOUT);
+    panelContainer.addToIndexedContainer("panelHeader", HEADER_DIMENSION, Position.ONE, JPanelComponentType.GRID_BAG_LAYOUT);
     var panelHeader = panelContainer.getComponentFromIndexedContainer("panelHeader");
     panelHeader.add(labelContainer.getComponentFromContainer("loginframe.panel.title"));
   }
 
   private void buildLinkPanel() {
-    panelContainer.addToIndexedContainer("panelLink", HEADER_DIMENSION, Position.THREE, JPanelComponentType.FLOW_LAYOUT);
+    panelContainer.addToIndexedContainer("panelLink", LINK_DIMENSION, Position.THREE, JPanelComponentType.FLOW_LAYOUT);
     setComponentsLinkPanel();
   }
 
@@ -74,7 +76,7 @@ public class LoginFrame extends JFrame implements IJFrame {
   }
 
   private void setComponentsFooterPanel() {
-    panelContainer.addToIndexedContainer("panelFooter", HEADER_DIMENSION, Position.FOUR, JPanelComponentType.FLOW_LAYOUT);
+    panelContainer.addToIndexedContainer("panelFooter", HEADER_DIMENSION, Position.FOUR, JPanelComponentType.GRID_BAG_LAYOUT);
     var panelFooter = panelContainer.getComponentFromIndexedContainer("panelFooter");
     panelFooter.add(buttonContainer.getComponentFromContainer("loginframe.button.connect"));
   }

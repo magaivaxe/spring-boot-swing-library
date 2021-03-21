@@ -8,7 +8,7 @@ import java.awt.*;
 
 /**
  * {@link JPanelComponentType#SPRING_LAYOUT} doesn't set dimension.
- * It is set into {@link SpringUtilities}.
+ * It is set into {@link SpringUtilities} at methods type makeGrids.
  */
 public enum JPanelComponentType implements IJComponentType {
 
@@ -16,8 +16,8 @@ public enum JPanelComponentType implements IJComponentType {
     @Override
     public JPanel buildJPanelComponent(String name, Dimension dimension) {
       var panel = new JPanel();
-      panel.setLayout(new SpringLayout());
       panel.setName(name);
+      panel.setLayout(new SpringLayout());
       return panel;
     }
   },
@@ -30,13 +30,27 @@ public enum JPanelComponentType implements IJComponentType {
   FLOW_LAYOUT {
     @Override
     public JPanel buildJPanelComponent(String name, Dimension dimension) {
-      var panel = new JPanel();
+      var panel = buildPanel(name, dimension);
       panel.setLayout(new FlowLayout());
-      panel.setName(name);
-      panel.setSize(dimension);
       return panel;
     }
+  },
+  GRID_BAG_LAYOUT {
+    @Override
+    public JPanel buildJPanelComponent(String name, Dimension dimension) {
+      var panel = buildPanel(name, dimension);
+      panel.setLayout(new GridBagLayout());
+      return panel;
+
+    }
   };
+
+  JPanel buildPanel(String name, Dimension dimension) {
+    var panel = new JPanel();
+    panel.setName(name);
+    panel.setSize(dimension);
+    return panel;
+  }
 
   abstract public JPanel buildJPanelComponent(String name, Dimension dimension);
 

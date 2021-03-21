@@ -1,13 +1,14 @@
 package org.system.library.frames;
 
 import org.system.library.frames.component.indexed.IJComponentIndexed;
+import org.system.library.utils.IDebugUtils;
 
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface IJFrame {
+public interface IJFrame extends IDebugUtils {
 
   int DEFAULT_PADDING = 20;
   Component CENTER_POSITION = null;
@@ -26,7 +27,10 @@ public interface IJFrame {
       .sorted(Comparator.comparing(IJComponentIndexed::getPosition))
       .collect(Collectors.toList());
 
-    mergedOrderedList.forEach(component -> panel.add(component.getComponent()));
+    mergedOrderedList.forEach(component -> {
+      setBorderIfRunDebug(component);
+      panel.add(component.getComponent());
+    });
   }
 
   default Dimension setDimensionBySizeComponents(Container parentContainer) {

@@ -138,8 +138,9 @@ public class SpringUtilities {
 
     var layout = (SpringLayout) parent.getLayout();
 
-    //Align all cells in each column and make them the same width.
     var xOriginAtomic = new AtomicReference<>(Spring.constant(xOrigin));
+
+    //Align all cells in each column and make them the same width.
     IntStream.range(0, numberColumns).forEach(currentColumn -> {
       var widthAtomic = new AtomicReference<>(Spring.constant(0));
 
@@ -157,11 +158,16 @@ public class SpringUtilities {
       });
 
       // Set new xOrigin to next cell
-      xOriginAtomic.set(Spring.sum(xOriginAtomic.get(), Spring.sum(widthAtomic.get(), Spring.constant(xPadding))));
+      if (isLastColumn(currentColumn, numberColumns)) {
+        xOriginAtomic.set(Spring.sum(xOriginAtomic.get(), widthAtomic.get()));
+      } else {
+        xOriginAtomic.set(Spring.sum(xOriginAtomic.get(), Spring.sum(widthAtomic.get(), Spring.constant(xPadding))));
+      }
     });
 
-    //Align all cells in each row and make them the same height.
     var yOriginAtomic = new AtomicReference<>(Spring.constant(yOrigin));
+
+    //Align all cells in each row and make them the same height.
     IntStream.range(0, numberRows).forEach(currentRow -> {
       var heightAtomic = new AtomicReference<>(Spring.constant(0));
 
@@ -179,7 +185,11 @@ public class SpringUtilities {
       });
 
       // Set new yOrigin to next cell
-      yOriginAtomic.set(Spring.sum(yOriginAtomic.get(), Spring.sum(heightAtomic.get(), Spring.constant(yPadding))));
+      if (isLastRow(currentRow, numberRows)) {
+        yOriginAtomic.set(Spring.sum(yOriginAtomic.get(), heightAtomic.get()));
+      } else {
+        yOriginAtomic.set(Spring.sum(yOriginAtomic.get(), Spring.sum(heightAtomic.get(), Spring.constant(yPadding))));
+      }
     });
 
     // Set the parent's size by sum of origins cells
@@ -188,4 +198,13 @@ public class SpringUtilities {
     parentConstraint.setConstraint(SpringLayout.EAST, xOriginAtomic.get());
     parent.setSize(xOriginAtomic.get().getValue(), yOriginAtomic.get().getValue());
   }
+
+  private static boolean isLastColumn(int currentColumn, int numberColumns) {
+    return currentColumn == numberColumns - 1;
+  }
+
+  private static boolean isLastRow(int currentRow, int numberRows) {
+    return currentRow == numberRows - 1;
+  }
+
 }
