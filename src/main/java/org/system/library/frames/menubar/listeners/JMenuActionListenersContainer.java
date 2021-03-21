@@ -1,4 +1,4 @@
-package org.system.library.frames.menubar.menus.menuitems;
+package org.system.library.frames.menubar.listeners;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class JMenuItemContainer {
-  private final JMenuItemQuiter quiterMenuItem;
-  private final JMenuItemAbout aboutMenuItem;
+public class JMenuActionListenersContainer {
+
+  private final QuitListener quitListener;
+  private final AboutListener aboutListener;
 }

@@ -1,4 +1,4 @@
-package org.system.library.listeners;
+package org.system.library.frames.menubar.listeners;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class QuitListener implements ActionListener {
+class QuitListener implements ActionListener {
 
   private final MessageLibrary message;
   private final ConfigurableApplicationContext context;

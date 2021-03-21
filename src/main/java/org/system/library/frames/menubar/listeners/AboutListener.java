@@ -1,4 +1,4 @@
-package org.system.library.listeners;
+package org.system.library.frames.menubar.listeners;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 
 @RequiredArgsConstructor
 @Component
-public class AboutListener implements ActionListener {
+class AboutListener implements ActionListener {
 
   private final MessageLibrary messageLibrary;
 

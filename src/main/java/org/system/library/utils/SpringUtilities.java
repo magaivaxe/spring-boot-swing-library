@@ -158,7 +158,7 @@ public class SpringUtilities {
       });
 
       // Set new xOrigin to next cell
-      if (isLastColumn(currentColumn, numberColumns)) {
+      if (isLastColumn(currentColumn, numberColumns) && xOrigin == 0) {
         xOriginAtomic.set(Spring.sum(xOriginAtomic.get(), widthAtomic.get()));
       } else {
         xOriginAtomic.set(Spring.sum(xOriginAtomic.get(), Spring.sum(widthAtomic.get(), Spring.constant(xPadding))));
@@ -185,7 +185,7 @@ public class SpringUtilities {
       });
 
       // Set new yOrigin to next cell
-      if (isLastRow(currentRow, numberRows)) {
+      if (isLastRow(currentRow, numberRows) && yOrigin == 0) {
         yOriginAtomic.set(Spring.sum(yOriginAtomic.get(), heightAtomic.get()));
       } else {
         yOriginAtomic.set(Spring.sum(yOriginAtomic.get(), Spring.sum(heightAtomic.get(), Spring.constant(yPadding))));
