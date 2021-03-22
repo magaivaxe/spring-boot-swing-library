@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.system.library.frames.menubar.JMenuGeneralContainer;
-import org.system.library.frames.menubar.listeners.JMenuActionListenersContainer;
+import org.system.library.frames.menubar.JMenusContainer;
+import org.system.library.frames.menubar.listeners.JMenuListenersContainer;
 
 import javax.swing.*;
 
@@ -14,9 +14,9 @@ import javax.swing.*;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class JMenuBarBuilder {
 
-  private final JMenuGeneralContainer menus;
-  private final JMenuGeneralContainer childsMenus;
-  private final JMenuActionListenersContainer listeners;
+  private final JMenusContainer menus;
+  private final JMenusContainer childsMenus;
+  private final JMenuListenersContainer listeners;
 
   public JMenuBar buildMenuBarByType(JMenuBarType type) {
     return JMenuBarType.buildMenuBarByType(type, menus, childsMenus, listeners);

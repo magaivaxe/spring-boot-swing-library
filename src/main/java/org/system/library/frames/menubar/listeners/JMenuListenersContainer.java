@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class JMenuActionListenersContainer {
+public class JMenuListenersContainer {
 
   private final QuitListener quitListener;
   private final AboutListener aboutListener;
+  private final LanguageListener languageListener;
 }

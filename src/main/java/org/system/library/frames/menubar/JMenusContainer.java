@@ -15,7 +15,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class JMenuGeneralContainer implements IJMenusContainers {
+public class JMenusContainer implements IJMenusContainers {
 
   private final MessageLibrary messageLibrary;
   private final Map<String, JComponent> menus = new LinkedHashMap<>();
@@ -23,14 +23,18 @@ public class JMenuGeneralContainer implements IJMenusContainers {
   @Override
   public JComponent addToContainer(String property, JMenuComponentType type) {
     var menu = JMenuComponentType.buildByType(messageLibrary.getMessage(property), type);
+    menu.setName(property);
     menus.put(property, menu);
     return menu;
   }
 
   @Override
-  public void addChildToContainerElement(String property, JComponent component) {
-    var menu = menus.get(property);
-    menu.add(component);
+  public JComponent addChildToContainerElement(String parentProperty, String childProperty, JMenuComponentType childType) {
+    var parent = menus.get(parentProperty);
+    var child = JMenuComponentType.buildByType(messageLibrary.getMessage(childProperty), childType);
+    child.setName(childProperty);
+    parent.add(child);
+    return child;
   }
 
   @Override

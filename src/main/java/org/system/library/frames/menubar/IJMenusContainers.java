@@ -7,7 +7,7 @@ public interface IJMenusContainers {
 
   JComponent addToContainer(String property, JMenuComponentType type);
 
-  void addChildToContainerElement(String property, JComponent menuItem);
+  JComponent addChildToContainerElement(String parentProperty, String childProperty, JMenuComponentType childType);
 
   void addChildsToContainerElement(String property, Set<JComponent> menuItems);
 
