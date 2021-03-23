@@ -8,51 +8,37 @@ import org.system.library.configuration.messages.MessageLibrary;
 
 import javax.swing.*;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class JMenusContainer implements IJMenusContainers {
+public class JMenusContainer {
 
   private final MessageLibrary messageLibrary;
-  private final Map<String, JComponent> menus = new LinkedHashMap<>();
+  private final Map<String, JMenuParentComponent> menus = new LinkedHashMap<>();
 
-  @Override
-  public JComponent addToContainer(String property, JMenuComponentType type) {
+  public JMenuParentComponent addToContainer(String property, JMenuComponentType type) {
     var menu = JMenuComponentType.buildByType(messageLibrary.getMessage(property), type);
     menu.setName(property);
-    menus.put(property, menu);
-    return menu;
+    var menuParent = JMenuParentComponent.builder().parentComponent(menu).build();
+    menus.put(property, menuParent);
+    return menuParent;
   }
 
-  @Override
-  public JComponent addChildToContainerElement(String parentProperty, String childProperty, JMenuComponentType childType) {
-    var parent = menus.get(parentProperty);
-    var child = JMenuComponentType.buildByType(messageLibrary.getMessage(childProperty), childType);
-    child.setName(childProperty);
-    parent.add(child);
-    return child;
-  }
-
-  @Override
-  public void addChildsToContainerElement(String property, Set<JComponent> components) {
-    var menu = menus.get(property);
-    components.forEach(menu::add);
-  }
-
-  @Override
-  public JComponent getFromContainer(String property) {
-    return menus.get(property);
-  }
-
-  @Override
-  public Set<JComponent> getAllAndClearContainer() {
-    var allMenus = new LinkedHashSet<>(menus.values());
+  public Set<JComponent> getAllParentsBuilded() {
+    var menusBuilded = menus.values().stream()
+      .map(JMenuParentComponent::buildAtParent).collect(Collectors.toUnmodifiableSet());
     menus.clear();
-    return allMenus;
+    return menusBuilded;
+  }
+
+  public JComponent buildChild(String property, JMenuComponentType type) {
+    var child = JMenuComponentType.buildByType(messageLibrary.getMessage(property), type);
+    child.setName(property);
+    return child;
   }
 
 }

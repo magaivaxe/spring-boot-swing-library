@@ -15,7 +15,6 @@ public class ApplicationConfig {
   public ResourceBundleMessageSource messageSource() {
     ResourceBundleMessageSource source = new ResourceBundleMessageSource();
     source.setBasename("messages");
-    source.setDefaultLocale(Locale.CANADA); // if not set it will choice by system language
     source.setUseCodeAsDefaultMessage(true);
     return source;
   }
