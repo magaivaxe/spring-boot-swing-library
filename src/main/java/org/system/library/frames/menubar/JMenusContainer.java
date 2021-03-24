@@ -18,19 +18,19 @@ import java.util.stream.Collectors;
 public class JMenusContainer {
 
   private final MessageLibrary messageLibrary;
-  private final Map<String, JMenuParentComponent> menus = new LinkedHashMap<>();
+  private final Map<String, JMenuComponent> menus = new LinkedHashMap<>();
 
-  public JMenuParentComponent addToContainer(String property, JMenuComponentType type) {
+  public JMenuComponent addToContainer(String property, JMenuComponentType type) {
     var menu = JMenuComponentType.buildByType(messageLibrary.getMessage(property), type);
     menu.setName(property);
-    var menuParent = JMenuParentComponent.builder().parentComponent(menu).build();
+    var menuParent = JMenuComponent.builder().parentComponent(menu).build();
     menus.put(property, menuParent);
     return menuParent;
   }
 
   public Set<JComponent> getAllParentsBuilded() {
     var menusBuilded = menus.values().stream()
-      .map(JMenuParentComponent::buildAtParent).collect(Collectors.toUnmodifiableSet());
+      .map(JMenuComponent::buildAtParent).collect(Collectors.toUnmodifiableSet());
     menus.clear();
     return menusBuilded;
   }

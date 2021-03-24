@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 class QuitListener implements ActionListener {
 
   private final MessageLibrary message;
-  private final ConfigurableApplicationContext context;
 
   @Override
   public void actionPerformed(ActionEvent event) {

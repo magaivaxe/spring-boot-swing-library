@@ -10,7 +10,7 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 @Component
-public class LanguageListener implements ItemListener {
+class LanguageListener implements ItemListener {
 
   private final ResourceBundleMessageSource messageSource;
 

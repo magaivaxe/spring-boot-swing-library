@@ -9,19 +9,19 @@ import java.util.Set;
 
 @Getter
 @Builder
-public class JMenuParentComponent {
+public class JMenuComponent {
 
-  private final Set<JMenuParentComponent> childs = new LinkedHashSet<>();
+  private final Set<JMenuComponent> childs = new LinkedHashSet<>();
   private final JComponent parentComponent;
 
-  public JMenuParentComponent addChildReturnParent(JComponent child) {
-    JMenuParentComponent childToParent = JMenuParentComponent.builder().parentComponent(child).build();
+  public JMenuComponent addChildReturnParent(JComponent child) {
+    JMenuComponent childToParent = JMenuComponent.builder().parentComponent(child).build();
     childs.add(childToParent);
     return this;
   }
 
-  public JMenuParentComponent addChildReturnChild(JComponent child) {
-    JMenuParentComponent childToParent = JMenuParentComponent.builder().parentComponent(child).build();
+  public JMenuComponent addChildReturnChild(JComponent child) {
+    JMenuComponent childToParent = JMenuComponent.builder().parentComponent(child).build();
     childs.add(childToParent);
     return childToParent;
   }
