@@ -1,7 +1,7 @@
 package org.system.library.frames;
 
 import org.system.library.frames.component.indexed.IJComponentIndexed;
-import org.system.library.utils.IDebugUtils;
+import org.system.library.frames.utils.IDebugUtils;
 
 import java.awt.*;
 import java.util.Comparator;

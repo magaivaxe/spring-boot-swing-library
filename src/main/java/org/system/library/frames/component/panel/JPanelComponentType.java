@@ -1,14 +1,14 @@
 package org.system.library.frames.component.panel;
 
 import org.system.library.frames.component.IJComponentType;
+import org.system.library.frames.utils.SpringLayoutUtils;
 
-import org.system.library.utils.SpringUtilities;
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * {@link JPanelComponentType#SPRING_LAYOUT} doesn't set dimension.
- * It is set into {@link SpringUtilities} at methods type makeGrids.
+ * It is set into {@link SpringLayoutUtils} at methods type makeGrids.
  */
 public enum JPanelComponentType implements IJComponentType {
 

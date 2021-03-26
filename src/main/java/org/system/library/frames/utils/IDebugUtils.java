@@ -1,4 +1,4 @@
-package org.system.library.utils;
+package org.system.library.frames.utils;
 
 import org.system.library.frames.component.indexed.IJComponentIndexed;
 

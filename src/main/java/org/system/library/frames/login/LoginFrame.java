@@ -1,10 +1,11 @@
-package org.system.library.frames;
+package org.system.library.frames.login;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
+import org.system.library.frames.IJFrame;
 import org.system.library.frames.component.Position;
 import org.system.library.frames.component.panel.JPanelComponentType;
 import org.system.library.frames.component.panel.JPanelContainer;
@@ -14,9 +15,9 @@ import org.system.library.frames.component.panel.label.JLabelComponentType;
 import org.system.library.frames.component.panel.label.JLabelContainer;
 import org.system.library.frames.component.panel.text.JTextComponentContainer;
 import org.system.library.frames.component.panel.text.JTextComponentType;
-import org.system.library.frames.menubar.factory.JMenuBarType;
 import org.system.library.frames.menubar.factory.JMenuBarBuilder;
-import org.system.library.utils.SpringUtilities;
+import org.system.library.frames.menubar.factory.JMenuBarType;
+import org.system.library.frames.utils.SpringLayoutUtils;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
@@ -93,7 +94,7 @@ public class LoginFrame extends JFrame implements IJFrame {
         labelContainer.getJComponentsIndexed(),
         buttonContainer.getJComponentsIndexed()
       ));
-    SpringUtilities.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING,
+    SpringLayoutUtils.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING,
       DEFAULT_PADDING);
   }
 

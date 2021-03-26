@@ -3,9 +3,9 @@ package org.system.library.frames.component.panel;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.system.library.frames.component.Position;
 import org.system.library.frames.component.IJComponentContainer;
 import org.system.library.frames.component.IJComponentType;
+import org.system.library.frames.component.Position;
 import org.system.library.frames.component.indexed.IJComponentIndexed;
 import org.system.library.frames.component.indexed.JComponentIndexed;
 

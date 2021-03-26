@@ -1,4 +1,4 @@
-package org.system.library.utils;
+package org.system.library.frames.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
