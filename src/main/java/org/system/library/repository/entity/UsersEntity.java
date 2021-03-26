@@ -20,6 +20,7 @@ public class UsersEntity {
   @Column(nullable = false)
   private Boolean enabled;
 
-  @OneToMany(mappedBy = "usersEntity", fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "username")
   private Set<AuthoritiesEntity> authorities = new HashSet<>();
 }

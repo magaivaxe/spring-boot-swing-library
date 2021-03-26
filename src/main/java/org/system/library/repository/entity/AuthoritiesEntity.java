@@ -12,15 +12,9 @@ import javax.persistence.*;
 public class AuthoritiesEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(nullable = false, insertable = false, updatable = false)
-  private String username;
   @Column(nullable = false)
   private String authority;
-
-  @ManyToOne
-  @JoinColumn(name = "username", referencedColumnName = "username")
-  private UsersEntity usersEntity;
 
 }
