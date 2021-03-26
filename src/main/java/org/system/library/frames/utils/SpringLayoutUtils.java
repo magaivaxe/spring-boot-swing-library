@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  * provides utility methods for creating form- or grid-style layouts with SpringLayout.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SpringUtilities {
+public class SpringLayoutUtils {
 
   private static final int FIRST_CELL = 0;
   private static final int SECOND_CELL = 1;
