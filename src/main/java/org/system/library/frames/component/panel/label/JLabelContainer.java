@@ -24,43 +24,33 @@ import java.util.stream.Collectors;
 public class JLabelContainer implements IJComponentContainer {
 
   private final MessageLibrary messageLibrary;
-  private final Map<String, JComponentIndexed> labelsIndexed = new HashMap<>();
-  private final Map<String, JLabel> labels = new HashMap<>();
+  private final Map<String, IJComponentIndexed> labelsIndexed = new HashMap<>();
 
   @Override
   public List<IJComponentIndexed> getJComponentsIndexed() {
-    return List.copyOf(labelsIndexed.values());
+    var labels = List.copyOf(labelsIndexed.values());
+    labelsIndexed.clear();
+    return labels;
   }
 
   @Override
-  public Map<String, JLabel> getJComponentsNotIndexedFromIndexed() {
+  public Map<String, JLabel> getJComponentsFromContainer() {
     return labelsIndexed.entrySet().stream()
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> (JLabel) entry.getValue().getComponent()));
   }
 
   @Override
-  public void addToIndexedContainer(String property, Dimension dimension, Position position, IJComponentType type) {
+  public JLabel addToContainer(String property, Dimension dimension, Position position, IJComponentType type) {
     var text = messageLibrary.getMessage(property);
     var label = JLabelComponentType.buildByType(text, (JLabelComponentType) type);
     var labelIndexed = JComponentIndexed.builder().component(label).position(position).build();
     labelsIndexed.put(property, labelIndexed);
-  }
-
-  @Override
-  public void addToContainer(String property, Dimension dimension, IJComponentType type) {
-    var text = messageLibrary.getMessage(property);
-    var label = JLabelComponentType.buildByType(text, (JLabelComponentType) type);
-    labels.put(property, label);
-  }
-
-  @Override
-  public JLabel getComponentFromIndexedContainer(String property) {
-    return (JLabel) labelsIndexed.get(property).getComponent();
+    return label;
   }
 
   @Override
   public JLabel getComponentFromContainer(String property) {
-    return labels.get(property);
+    return (JLabel) labelsIndexed.get(property).getComponent();
   }
 
   public void setLabelFor(Map<String, ? extends JComponent> mapComponents) {

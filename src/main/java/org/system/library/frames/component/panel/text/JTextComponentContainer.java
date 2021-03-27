@@ -25,43 +25,34 @@ import java.util.stream.Collectors;
 public class JTextComponentContainer implements IJComponentContainer {
 
   private final MessageLibrary messageLibrary;
-  private final Map<String, JComponentIndexed> textComponentsIndexed = new HashMap<>();
-  private final Map<String, JTextComponent> textComponents = new HashMap<>();
+  private final Map<String, IJComponentIndexed> textComponentsIndexed = new HashMap<>();
 
   @Override
-  public Map<String, JComponent> getJComponentsNotIndexedFromIndexed() {
+  public Map<String, JComponent> getJComponentsFromContainer() {
     return textComponentsIndexed.entrySet()
       .stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getComponent()));
   }
 
   @Override
   public List<IJComponentIndexed> getJComponentsIndexed() {
-    return List.copyOf(textComponentsIndexed.values());
+    var textComponents = List.copyOf(textComponentsIndexed.values());
+    textComponentsIndexed.clear();
+    return textComponents;
   }
 
   @Override
-  public void addToIndexedContainer(String name, Dimension dimension, Position position, IJComponentType type) {
+  public JComponent addToContainer(String name, Dimension dimension, Position position, IJComponentType type) {
     var textComponent = JTextComponentType.buildByType(name, dimension, (JTextComponentType) type);
     var textFieldIndexed = JComponentIndexed.builder()
       .component(textComponent)
       .position(position).build();
     textComponentsIndexed.put(name, textFieldIndexed);
+    return textComponent;
   }
 
   @Override
-  public void addToContainer(String name, Dimension dimension, IJComponentType type) {
-    var textComponent = JTextComponentType.buildByType(name, dimension, (JTextComponentType) type);
-    textComponents.put(name, (JTextComponent) textComponent);
-  }
-
-  @Override
-  public JComponent getComponentFromIndexedContainer(String name) {
+  public JComponent getComponentFromContainer(String name) {
     return textComponentsIndexed.get(name).getComponent();
-  }
-
-  @Override
-  public JTextComponent getComponentFromContainer(String name) {
-    return textComponents.get(name);
   }
 
   public void setToolTipMessage(String property, String nameTextfield) {

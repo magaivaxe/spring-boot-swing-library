@@ -24,7 +24,9 @@ public enum JPanelComponentType implements IJComponentType {
   BOX_LAYOUT {
     @Override
     public JPanel buildJPanelComponent(String name, Dimension dimension) {
-      return null;
+      var panel = buildPanel(name, dimension);
+      panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+      return panel;
     }
   },
   FLOW_LAYOUT {

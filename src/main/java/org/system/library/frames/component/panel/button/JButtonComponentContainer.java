@@ -24,44 +24,34 @@ import java.util.stream.Collectors;
 public class JButtonComponentContainer implements IJComponentContainer {
 
   private final MessageLibrary messageLibrary;
-  private final Map<String, JComponentIndexed> buttonComponentsIndexed = new HashMap<>();
-  private final Map<String, AbstractButton> buttonComponents = new HashMap<>();
+  private final Map<String, IJComponentIndexed> buttonsIndexed = new HashMap<>();
 
   @Override
-  public Map<String, JComponent> getJComponentsNotIndexedFromIndexed() {
-    return buttonComponentsIndexed.entrySet().stream()
+  public Map<String, JComponent> getJComponentsFromContainer() {
+    return buttonsIndexed.entrySet().stream()
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getComponent()));
   }
 
   @Override
   public List<IJComponentIndexed> getJComponentsIndexed() {
-    return List.copyOf(buttonComponentsIndexed.values());
+    var componentsIndexed = List.copyOf(buttonsIndexed.values());
+    buttonsIndexed.clear();
+    return componentsIndexed;
   }
 
   @Override
-  public void addToIndexedContainer(String property, Dimension dimension, Position position, IJComponentType type) {
+  public AbstractButton addToContainer(String property, Dimension dimension, Position position, IJComponentType type) {
     var text = messageLibrary.getMessage(property);
     var buttonComponent = JButtonComponentType.buildByType(text, dimension, (JButtonComponentType) type);
     var buttonComponentIndexed = JComponentIndexed.builder()
       .component(buttonComponent)
       .position(position).build();
-    buttonComponentsIndexed.put(property, buttonComponentIndexed);
-  }
-
-  @Override
-  public void addToContainer(String property, Dimension dimension, IJComponentType type) {
-    var text = messageLibrary.getMessage(property);
-    var buttonComponent = JButtonComponentType.buildByType(text, dimension, (JButtonComponentType) type);
-    buttonComponents.put(property, buttonComponent);
-  }
-
-  @Override
-  public JComponent getComponentFromIndexedContainer(String property) {
-    return buttonComponentsIndexed.get(property).getComponent();
+    buttonsIndexed.put(property, buttonComponentIndexed);
+    return buttonComponent;
   }
 
   @Override
   public AbstractButton getComponentFromContainer(String property) {
-    return buttonComponents.get(property);
+    return (AbstractButton) buttonsIndexed.get(property).getComponent();
   }
 }

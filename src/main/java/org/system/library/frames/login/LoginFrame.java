@@ -45,71 +45,68 @@ public class LoginFrame extends JFrame implements IJFrame {
   }
 
   private void buildHeaderPanel() {
-    labelContainer.addToContainer("loginframe.panel.title", null, JLabelComponentType.LABEL);
-    labelContainer.getComponentFromContainer("loginframe.panel.title")
-      .setAlignmentY(java.awt.Component.CENTER_ALIGNMENT);
-    setComponentsHeaderPanel();
+    var panelHeader = panelContainer.addToContainer("panelHeader", HEADER_DIMENSION, Position.ONE, JPanelComponentType.GRID_BAG_LAYOUT);
+    setComponentsHeaderPanel(panelHeader);
   }
 
-  private void setComponentsHeaderPanel() {
-    panelContainer.addToIndexedContainer("panelHeader", HEADER_DIMENSION, Position.ONE, JPanelComponentType.GRID_BAG_LAYOUT);
-    var panelHeader = panelContainer.getComponentFromIndexedContainer("panelHeader");
-    panelHeader.add(labelContainer.getComponentFromContainer("loginframe.panel.title"));
+  private void setComponentsHeaderPanel(JPanel panelHeader) {
+    var labelHeader = labelContainer.addToContainer("loginframe.panel.title", null, Position.ONE, JLabelComponentType.LABEL);
+    labelHeader.setAlignmentY(java.awt.Component.CENTER_ALIGNMENT);
+    addComponentsByPosition(panelHeader, List.of(labelContainer.getJComponentsIndexed()));
   }
 
   private void buildLinkPanel() {
-    panelContainer.addToIndexedContainer("panelLink", LINK_DIMENSION, Position.THREE, JPanelComponentType.FLOW_LAYOUT);
-    setComponentsLinkPanel();
+    var panelLink = panelContainer.addToContainer("panelLink", LINK_DIMENSION, Position.THREE, JPanelComponentType.BOX_LAYOUT);
+    setComponentsLinkPanel(panelLink);
   }
 
-  private void setComponentsLinkPanel() {
-    buttonContainer.addToContainer("loginframe.passwordforgoten", null, JButtonComponentType.BUTTON_HYPER_LINK);
-    var panelLink = panelContainer.getComponentFromIndexedContainer("panelLink");
-    panelLink.add(buttonContainer.getComponentFromContainer("loginframe.passwordforgoten"));
+  private void setComponentsLinkPanel(JPanel panelLink) {
+    var passwordForgoten = buttonContainer.addToContainer("loginframe.passwordforgoten", LINK_DIMENSION, Position.ONE, JButtonComponentType.BUTTON_HYPER_LINK);
+    var createAccount = buttonContainer.addToContainer("loginframe.create.account", LINK_DIMENSION, Position.TWO, JButtonComponentType.BUTTON_HYPER_LINK);
+    passwordForgoten.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    createAccount.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+    addComponentsByPosition(panelLink, List.of(buttonContainer.getJComponentsIndexed()));
   }
 
   private void buildFooterPanel() {
-    buttonContainer.addToContainer("loginframe.button.connect", BUTTON_DIMENSION, JButtonComponentType.BUTTON);
-    setComponentsFooterPanel();
+    var panelFooter = panelContainer.addToContainer("panelFooter", HEADER_DIMENSION, Position.FOUR, JPanelComponentType.GRID_BAG_LAYOUT);
+    setComponentsFooterPanel(panelFooter);
   }
 
-  private void setComponentsFooterPanel() {
-    panelContainer.addToIndexedContainer("panelFooter", HEADER_DIMENSION, Position.FOUR, JPanelComponentType.GRID_BAG_LAYOUT);
-    var panelFooter = panelContainer.getComponentFromIndexedContainer("panelFooter");
-    panelFooter.add(buttonContainer.getComponentFromContainer("loginframe.button.connect"));
+  private void setComponentsFooterPanel(JPanel panelFooter) {
+    buttonContainer.addToContainer("loginframe.button.connect", BUTTON_DIMENSION, Position.ONE, JButtonComponentType.BUTTON);
+    addComponentsByPosition(panelFooter, List.of(buttonContainer.getJComponentsIndexed()));
   }
 
   private void buildBodyPanel() {
-    panelContainer.addToIndexedContainer("panelBody", null, Position.TWO, JPanelComponentType.SPRING_LAYOUT);
+    var panelBody = panelContainer.addToContainer("panelBody", null, Position.TWO, JPanelComponentType.SPRING_LAYOUT);
     buildTextFieldsBodyPanel();
     buildLabelsBodyPanel();
-    buildBodyLayoutPanel();
+    buildBodyLayoutPanel(panelBody);
   }
 
-  private void buildBodyLayoutPanel() {
-    var panelBody = panelContainer.getComponentFromIndexedContainer("panelBody");
+  private void buildBodyLayoutPanel(JPanel panelBody) {
     addComponentsByPosition(panelBody,
       List.of(
         textComponentContainer.getJComponentsIndexed(),
-        labelContainer.getJComponentsIndexed(),
-        buttonContainer.getJComponentsIndexed()
+        labelContainer.getJComponentsIndexed()
       ));
     SpringLayoutUtils.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING,
       DEFAULT_PADDING);
   }
 
   private void buildLabelsBodyPanel() {
-    labelContainer.addToIndexedContainer("application.user", null, Position.ONE,
+    labelContainer.addToContainer("application.user", null, Position.ONE,
       JLabelComponentType.LABEL);
-    labelContainer.addToIndexedContainer("application.password", null, Position.THREE,
+    labelContainer.addToContainer("application.password", null, Position.THREE,
       JLabelComponentType.LABEL);
-    labelContainer.setLabelFor(textComponentContainer.getJComponentsNotIndexedFromIndexed());
+    labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer()); //TODO: see if setLabel works, keys from text and labels components
   }
 
   private void buildTextFieldsBodyPanel() {
-    textComponentContainer.addToIndexedContainer("user", LOGIN_TEXT_FIELD_DIMENSION, Position.TWO,
+    textComponentContainer.addToContainer("application.user", LOGIN_TEXT_FIELD_DIMENSION, Position.TWO,
       JTextComponentType.TEXT_FIELD);
-    textComponentContainer.addToIndexedContainer("password", LOGIN_TEXT_FIELD_DIMENSION, Position.FOUR,
+    textComponentContainer.addToContainer("application.password", LOGIN_TEXT_FIELD_DIMENSION, Position.FOUR,
       JTextComponentType.PASSWORD_FIELD);
   }
 

@@ -9,15 +9,11 @@ import java.util.Map;
 
 public interface IJComponentContainer {
 
-  Map<String, ? extends JComponent> getJComponentsNotIndexedFromIndexed();
+  Map<String, ? extends JComponent> getJComponentsFromContainer();
 
   List<IJComponentIndexed> getJComponentsIndexed();
 
-  void addToIndexedContainer(String property, Dimension dimension, Position position, IJComponentType type);
-
-  void addToContainer(String property, Dimension dimension, IJComponentType type);
-
-  JComponent getComponentFromIndexedContainer(String key);
+  JComponent addToContainer(String property, Dimension dimension, Position position, IJComponentType type);
 
   JComponent getComponentFromContainer(String key);
 }
