@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class JPanelContainer implements IJComponentContainer {
 
-  private final Map<String, JComponentIndexed> panelsIndexed = new HashMap<>();
+  private final Map<String, IJComponentIndexed> panelsIndexed = new HashMap<>();
 
   @Override
   public Map<String, JPanel> getJComponentsFromContainer() {
@@ -30,7 +30,9 @@ public class JPanelContainer implements IJComponentContainer {
 
   @Override
   public List<IJComponentIndexed> getJComponentsIndexed() {
-    return List.copyOf(panelsIndexed.values());
+    var panels = List.copyOf(panelsIndexed.values());
+    panelsIndexed.clear();
+    return panels;
   }
 
   @Override
