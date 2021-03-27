@@ -1,7 +1,6 @@
-package org.system.library.frames.component.indexed;
+package org.system.library.frames.component;
 
 import lombok.Builder;
-import org.system.library.frames.component.Position;
 
 import javax.swing.*;
 

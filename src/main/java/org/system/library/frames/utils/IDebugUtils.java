@@ -1,14 +1,15 @@
 package org.system.library.frames.utils;
 
-import org.system.library.frames.component.indexed.IJComponentIndexed;
+import org.system.library.frames.component.IJComponentIndexed;
 
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.lang.management.ManagementFactory;
 
 public interface IDebugUtils {
 
-  default void setBorderIfRunDebug(IJComponentIndexed component) {
+  default void setBorderIfRunDebug(IJComponentIndexed<? extends JComponent> component) {
     if (isDebugMode()) {
       component.getComponent().setBorder(new LineBorder(Color.BLACK, 1));
     }

@@ -7,14 +7,11 @@ import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
 import org.system.library.frames.IJFrame;
 import org.system.library.frames.component.Position;
-import org.system.library.frames.component.panel.JPanelComponentType;
-import org.system.library.frames.component.panel.JPanelContainer;
-import org.system.library.frames.component.panel.button.JButtonComponentContainer;
-import org.system.library.frames.component.panel.button.JButtonComponentType;
-import org.system.library.frames.component.panel.label.JLabelComponentType;
-import org.system.library.frames.component.panel.label.JLabelContainer;
-import org.system.library.frames.component.panel.text.JTextComponentContainer;
-import org.system.library.frames.component.panel.text.JTextComponentType;
+import org.system.library.frames.component.builder.JButtonComponentType;
+import org.system.library.frames.component.builder.JLabelComponentType;
+import org.system.library.frames.component.builder.JPanelComponentType;
+import org.system.library.frames.component.builder.JTextComponentType;
+import org.system.library.frames.component.container.JComponentContainer;
 import org.system.library.frames.menubar.factory.JMenuBarBuilder;
 import org.system.library.frames.menubar.factory.JMenuBarType;
 import org.system.library.frames.utils.SpringLayoutUtils;
@@ -30,10 +27,10 @@ public class LoginFrame extends JFrame implements IJFrame {
 
   private final MessageLibrary message;
   private final JMenuBarBuilder menuBarBuilder;
-  private final JTextComponentContainer textComponentContainer;
-  private final JLabelContainer labelContainer;
-  private final JButtonComponentContainer buttonContainer;
-  private final JPanelContainer panelContainer;
+  private final JComponentContainer<JComponent> textComponentContainer;
+  private final JComponentContainer<AbstractButton> buttonContainer;
+  private final JComponentContainer<JPanel> panelContainer;
+  private final JComponentContainer<JLabel> labelContainer;
 
   @PostConstruct
   private void build() {
@@ -115,7 +112,7 @@ public class LoginFrame extends JFrame implements IJFrame {
   private void buildLabelsBodyPanel() {
     labelContainer.addToContainer("application.user", null, Position.ONE, JLabelComponentType.LABEL);
     labelContainer.addToContainer("application.password", null, Position.THREE, JLabelComponentType.LABEL);
-    labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer());
+//    labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer()); //TODO: see this and check correction
   }
 
   private void buildTextFieldsBodyPanel() {

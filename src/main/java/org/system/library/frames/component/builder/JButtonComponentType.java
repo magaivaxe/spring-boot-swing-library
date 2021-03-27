@@ -1,7 +1,6 @@
-package org.system.library.frames.component.panel.button;
+package org.system.library.frames.component.builder;
 
 import org.system.library.frames.IJFrame;
-import org.system.library.frames.component.IJComponentType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,11 +9,11 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 
-public enum JButtonComponentType implements IJComponentType {
+public enum JButtonComponentType implements IJComponentType<AbstractButton> {
 
   BUTTON {
     @Override
-    public JButton buildJButtonComponent(String text, Dimension dimension) {
+    public JButton buildComponent(String text, Dimension dimension) {
       var button = new JButton(text);
       button.setMaximumSize(dimension);
       return button;
@@ -22,7 +21,7 @@ public enum JButtonComponentType implements IJComponentType {
   },
   BUTTON_HYPER_LINK {
     @Override
-    public JButton buildJButtonComponent(String text, Dimension dimension) {
+    public JButton buildComponent(String text, Dimension dimension) {
       var button = new JButton(text);
       setHyperLinkFormat(button);
       return button;
@@ -38,11 +37,6 @@ public enum JButtonComponentType implements IJComponentType {
     button.addMouseListener(new DefaultMouseHyperLinkListener());
   }
 
-  abstract public AbstractButton buildJButtonComponent(String text, Dimension dimension);
-
-  public static AbstractButton buildByType(String text, Dimension dimension, JButtonComponentType type) {
-    return type.buildJButtonComponent(text, dimension);
-  }
 }
 
 class DefaultMouseHyperLinkListener extends MouseAdapter {

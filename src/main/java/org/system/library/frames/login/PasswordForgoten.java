@@ -6,10 +6,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
 import org.system.library.frames.IJFrame;
-import org.system.library.frames.component.panel.JPanelContainer;
-import org.system.library.frames.component.panel.button.JButtonComponentContainer;
-import org.system.library.frames.component.panel.label.JLabelContainer;
-import org.system.library.frames.component.panel.text.JTextComponentContainer;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;

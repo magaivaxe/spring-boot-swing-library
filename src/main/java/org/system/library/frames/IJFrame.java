@@ -1,8 +1,9 @@
 package org.system.library.frames;
 
-import org.system.library.frames.component.indexed.IJComponentIndexed;
+import org.system.library.frames.component.IJComponentIndexed;
 import org.system.library.frames.utils.IDebugUtils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
@@ -21,7 +22,8 @@ public interface IJFrame extends IDebugUtils {
   Color LINK_UNVISITED = new Color(0, 102, 204);
   Color LINK_VISITED = new Color(128, 0, 128);
 
-  default void addComponentsByPosition(Container panel, List<List<IJComponentIndexed>> listsJComponents) {
+  default void addComponentsByPosition(Container panel,
+                                       List<List<IJComponentIndexed<? extends JComponent>>> listsJComponents) {
     var mergedOrderedList = listsJComponents.stream()
                                             .flatMap(List::stream)
                                             .sorted(Comparator.comparing(IJComponentIndexed::getPosition))
