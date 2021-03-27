@@ -45,36 +45,56 @@ public class LoginFrame extends JFrame implements IJFrame {
   }
 
   private void buildHeaderPanel() {
-    var panelHeader = panelContainer.addToContainer("panelHeader", HEADER_DIMENSION, Position.ONE, JPanelComponentType.GRID_BAG_LAYOUT);
+    var panelHeader = panelContainer.addToContainer("panelHeader",
+                                                    HEADER_DIMENSION,
+                                                    Position.ONE,
+                                                    JPanelComponentType.GRID_BAG_LAYOUT);
     setComponentsHeaderPanel(panelHeader);
   }
 
   private void setComponentsHeaderPanel(JPanel panelHeader) {
-    var labelHeader = labelContainer.addToContainer("loginframe.panel.title", null, Position.ONE, JLabelComponentType.LABEL);
+    var labelHeader = labelContainer.addToContainer("loginframe.panel.title",
+                                                    null,
+                                                    Position.ONE,
+                                                    JLabelComponentType.LABEL);
     labelHeader.setAlignmentY(java.awt.Component.CENTER_ALIGNMENT);
     addComponentsByPosition(panelHeader, List.of(labelContainer.getJComponentsIndexed()));
   }
 
   private void buildLinkPanel() {
-    var panelLink = panelContainer.addToContainer("panelLink", LINK_DIMENSION, Position.THREE, JPanelComponentType.BOX_LAYOUT);
+    var panelLink = panelContainer.addToContainer("panelLink",
+                                                  LINK_DIMENSION,
+                                                  Position.THREE,
+                                                  JPanelComponentType.BOX_LAYOUT);
     setComponentsLinkPanel(panelLink);
   }
 
   private void setComponentsLinkPanel(JPanel panelLink) {
-    var passwordForgoten = buttonContainer.addToContainer("loginframe.passwordforgoten", LINK_DIMENSION, Position.ONE, JButtonComponentType.BUTTON_HYPER_LINK);
-    var createAccount = buttonContainer.addToContainer("loginframe.create.account", LINK_DIMENSION, Position.TWO, JButtonComponentType.BUTTON_HYPER_LINK);
+    var passwordForgoten = buttonContainer.addToContainer("loginframe.passwordforgoten",
+                                                          LINK_DIMENSION,
+                                                          Position.ONE,
+                                                          JButtonComponentType.BUTTON_HYPER_LINK);
+    var createAccount = buttonContainer.addToContainer("loginframe.create.account",
+                                                       LINK_DIMENSION, Position.TWO,
+                                                       JButtonComponentType.BUTTON_HYPER_LINK);
     passwordForgoten.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
     createAccount.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
     addComponentsByPosition(panelLink, List.of(buttonContainer.getJComponentsIndexed()));
   }
 
   private void buildFooterPanel() {
-    var panelFooter = panelContainer.addToContainer("panelFooter", HEADER_DIMENSION, Position.FOUR, JPanelComponentType.GRID_BAG_LAYOUT);
+    var panelFooter = panelContainer.addToContainer("panelFooter",
+                                                    HEADER_DIMENSION,
+                                                    Position.FOUR,
+                                                    JPanelComponentType.GRID_BAG_LAYOUT);
     setComponentsFooterPanel(panelFooter);
   }
 
   private void setComponentsFooterPanel(JPanel panelFooter) {
-    buttonContainer.addToContainer("loginframe.button.connect", BUTTON_DIMENSION, Position.ONE, JButtonComponentType.BUTTON);
+    buttonContainer.addToContainer("loginframe.button.connect",
+                                   BUTTON_DIMENSION,
+                                   Position.ONE,
+                                   JButtonComponentType.BUTTON);
     addComponentsByPosition(panelFooter, List.of(buttonContainer.getJComponentsIndexed()));
   }
 
@@ -87,27 +107,26 @@ public class LoginFrame extends JFrame implements IJFrame {
 
   private void buildBodyLayoutPanel(JPanel panelBody) {
     addComponentsByPosition(panelBody,
-      List.of(
-        textComponentContainer.getJComponentsIndexed(),
-        labelContainer.getJComponentsIndexed()
-      ));
-    SpringLayoutUtils.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING,
-      DEFAULT_PADDING);
+                            List.of(textComponentContainer.getJComponentsIndexed(),
+                                    labelContainer.getJComponentsIndexed()));
+    SpringLayoutUtils.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING, DEFAULT_PADDING);
   }
 
   private void buildLabelsBodyPanel() {
-    labelContainer.addToContainer("application.user", null, Position.ONE,
-      JLabelComponentType.LABEL);
-    labelContainer.addToContainer("application.password", null, Position.THREE,
-      JLabelComponentType.LABEL);
+    labelContainer.addToContainer("application.user", null, Position.ONE, JLabelComponentType.LABEL);
+    labelContainer.addToContainer("application.password", null, Position.THREE, JLabelComponentType.LABEL);
     labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer());
   }
 
   private void buildTextFieldsBodyPanel() {
-    textComponentContainer.addToContainer("application.user", LOGIN_TEXT_FIELD_DIMENSION, Position.TWO,
-      JTextComponentType.TEXT_FIELD);
-    textComponentContainer.addToContainer("application.password", LOGIN_TEXT_FIELD_DIMENSION, Position.FOUR,
-      JTextComponentType.PASSWORD_FIELD);
+    textComponentContainer.addToContainer("application.user",
+                                          LOGIN_TEXT_FIELD_DIMENSION,
+                                          Position.TWO,
+                                          JTextComponentType.TEXT_FIELD);
+    textComponentContainer.addToContainer("application.password",
+                                          LOGIN_TEXT_FIELD_DIMENSION,
+                                          Position.FOUR,
+                                          JTextComponentType.PASSWORD_FIELD);
   }
 
   private void buildFrame() {

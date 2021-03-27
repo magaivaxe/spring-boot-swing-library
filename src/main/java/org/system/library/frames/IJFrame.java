@@ -23,9 +23,9 @@ public interface IJFrame extends IDebugUtils {
 
   default void addComponentsByPosition(Container panel, List<List<IJComponentIndexed>> listsJComponents) {
     var mergedOrderedList = listsJComponents.stream()
-      .flatMap(List::stream)
-      .sorted(Comparator.comparing(IJComponentIndexed::getPosition))
-      .collect(Collectors.toList());
+                                            .flatMap(List::stream)
+                                            .sorted(Comparator.comparing(IJComponentIndexed::getPosition))
+                                            .collect(Collectors.toList());
 
     mergedOrderedList.forEach(component -> {
       setBorderIfRunDebug(component);

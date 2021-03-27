@@ -12,7 +12,6 @@ import org.system.library.frames.component.indexed.IJComponentIndexed;
 import org.system.library.frames.component.indexed.JComponentIndexed;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,8 @@ public class JTextComponentContainer implements IJComponentContainer {
   @Override
   public Map<String, JComponent> getJComponentsFromContainer() {
     return textComponentsIndexed.entrySet()
-      .stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getComponent()));
+                                .stream()
+                                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getComponent()));
   }
 
   @Override
@@ -44,8 +44,8 @@ public class JTextComponentContainer implements IJComponentContainer {
   public JComponent addToContainer(String name, Dimension dimension, Position position, IJComponentType type) {
     var textComponent = JTextComponentType.buildByType(name, dimension, (JTextComponentType) type);
     var textFieldIndexed = JComponentIndexed.builder()
-      .component(textComponent)
-      .position(position).build();
+                                            .component(textComponent)
+                                            .position(position).build();
     textComponentsIndexed.put(name, textFieldIndexed);
     return textComponent;
   }
@@ -57,7 +57,7 @@ public class JTextComponentContainer implements IJComponentContainer {
 
   public void setToolTipMessage(String property, String nameTextfield) {
     textComponentsIndexed.get(nameTextfield).getComponent()
-      .setToolTipText(messageLibrary.getMessage(property));
+                         .setToolTipText(messageLibrary.getMessage(property));
   }
 
 }

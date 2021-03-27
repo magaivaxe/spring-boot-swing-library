@@ -25,10 +25,10 @@ class QuitListener implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent event) {
     var response = JOptionPane.showConfirmDialog(null,
-      message.getMessage("dialog.quit"),
-      message.getMessage("dialog.info.title"),
-      JOptionPane.YES_OPTION,
-      JOptionPane.WARNING_MESSAGE);
+                                                 message.getMessage("dialog.quit"),
+                                                 message.getMessage("dialog.info.title"),
+                                                 JOptionPane.YES_OPTION,
+                                                 JOptionPane.WARNING_MESSAGE);
 
     if (response == 0) {
       findParentsFrames().forEach(Window::dispose);
@@ -39,7 +39,7 @@ class QuitListener implements ActionListener {
   private Set<Frame> findParentsFrames() {
     var frame = FocusManager.getCurrentManager().getActiveWindow();
     return Arrays.stream(JFrame.getFrames())
-      .filter(Window::isVisible)
-      .collect(Collectors.toUnmodifiableSet());
+                 .filter(Window::isVisible)
+                 .collect(Collectors.toUnmodifiableSet());
   }
 }

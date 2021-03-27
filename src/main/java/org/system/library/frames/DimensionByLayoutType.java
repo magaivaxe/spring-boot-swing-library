@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 @RequiredArgsConstructor
 public enum DimensionByLayoutType {
@@ -32,8 +33,12 @@ public enum DimensionByLayoutType {
 
   public static Dimension buildDimensionByLayoutType(Container parentContainer) {
     var dimensionLayoutType = Arrays.stream(DimensionByLayoutType.values())
-      .filter(layoutType -> layoutType.typeLayout == parentContainer.getLayout().getClass())
-      .findFirst().orElseThrow();
+                                    .filter(checkLayoutType(parentContainer))
+                                    .findFirst().orElseThrow();
     return dimensionLayoutType.dimensionByType(parentContainer);
+  }
+
+  private static Predicate<DimensionByLayoutType> checkLayoutType(Container parentContainer) {
+    return layoutType -> layoutType.typeLayout == parentContainer.getLayout().getClass();
   }
 }

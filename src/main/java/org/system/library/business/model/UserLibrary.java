@@ -6,11 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.system.library.repository.entity.AuthoritiesEntity;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -25,9 +23,6 @@ public class UserLibrary implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-//    return authorities.stream()
-//      .map(auth -> new UserLibraryAuthorities(auth.getAuthority()))
-//      .collect(Collectors.toSet());
     return authorities;
   }
 

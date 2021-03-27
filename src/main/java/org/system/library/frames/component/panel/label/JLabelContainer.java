@@ -35,7 +35,8 @@ public class JLabelContainer implements IJComponentContainer {
 
   @Override
   public Map<String, JLabel> getJComponentsFromContainer() {
-    return labelsIndexed.entrySet().stream()
+    return labelsIndexed
+      .entrySet().stream()
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> (JLabel) entry.getValue().getComponent()));
   }
 

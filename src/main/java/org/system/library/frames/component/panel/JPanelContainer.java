@@ -24,7 +24,8 @@ public class JPanelContainer implements IJComponentContainer {
 
   @Override
   public Map<String, JPanel> getJComponentsFromContainer() {
-    return panelsIndexed.entrySet().stream()
+    return panelsIndexed
+      .entrySet().stream()
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> (JPanel) entry.getValue().getComponent()));
   }
 

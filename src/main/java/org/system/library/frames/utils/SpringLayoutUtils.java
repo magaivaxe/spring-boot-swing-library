@@ -89,9 +89,9 @@ public class SpringLayoutUtils {
     // Set the parent's size by sum of padding + last point(east, south)
     var parentConstraint = layout.getConstraints(parent);
     parentConstraint.setConstraint(SpringLayout.SOUTH,
-      Spring.sum(yPadSpring, lastCellConstraint.get().getConstraint(SpringLayout.SOUTH)));
+                                   Spring.sum(yPadSpring, lastCellConstraint.get().getConstraint(SpringLayout.SOUTH)));
     parentConstraint.setConstraint(SpringLayout.EAST,
-      Spring.sum(xPadSpring, lastCellConstraint.get().getConstraint(SpringLayout.EAST)));
+                                   Spring.sum(xPadSpring, lastCellConstraint.get().getConstraint(SpringLayout.EAST)));
   }
 
   private static boolean isFirstRow(int cell, int numberColumns) {
@@ -115,8 +115,8 @@ public class SpringLayoutUtils {
 
   /**
    * Aligns the first {@code rows} * {@code cols} components of {@code parent} in a grid. Each component in a column is
-   * as wide as the maximum preferred width of the components in that column. Height is similarly determined for each row.
-   * The parent is made just big enough to fit them all.
+   * as wide as the maximum preferred width of the components in that column. Height is similarly determined for each
+   * row. The parent is made just big enough to fit them all.
    *
    * @param parent        container using SpringLayout
    * @param numberRows    number of grid rows
@@ -147,7 +147,7 @@ public class SpringLayoutUtils {
       // Grid with calculus
       IntStream.range(0, numberRows).forEach(currentRow -> {
         widthAtomic.set(Spring.max(widthAtomic.get(),
-          getConstraintsForCell(currentRow, currentColumn, parent, numberColumns).getWidth()));
+                                   getConstraintsForCell(currentRow, currentColumn, parent, numberColumns).getWidth()));
       });
 
       // Compose and set rows constraints
@@ -174,7 +174,8 @@ public class SpringLayoutUtils {
       // Grid height calculus
       IntStream.range(0, numberColumns).forEach(currentColumn -> {
         heightAtomic.set(Spring.max(heightAtomic.get(),
-          getConstraintsForCell(currentRow, currentColumn, parent, numberColumns).getHeight()));
+                                    getConstraintsForCell(currentRow, currentColumn, parent, numberColumns)
+                                      .getHeight()));
       });
 
       // Compose and set columns constraints

@@ -7,8 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * {@link JPanelComponentType#SPRING_LAYOUT} doesn't set dimension.
- * It is set into {@link SpringLayoutUtils} at methods type makeGrids.
+ * {@link JPanelComponentType#SPRING_LAYOUT} doesn't set dimension. It is set into {@link SpringLayoutUtils} at methods
+ * type makeGrids.
  */
 public enum JPanelComponentType implements IJComponentType {
 

@@ -17,8 +17,8 @@ class AboutListener implements ActionListener {
   @Override
   public void actionPerformed(ActionEvent e) {
     JOptionPane.showMessageDialog(null,
-      messageLibrary.getMessage("dialog.about.text"),
-      messageLibrary.getMessage("dialog.about.title"),
-      JOptionPane.INFORMATION_MESSAGE);
+                                  messageLibrary.getMessage("dialog.about.text"),
+                                  messageLibrary.getMessage("dialog.about.title"),
+                                  JOptionPane.INFORMATION_MESSAGE);
   }
 }

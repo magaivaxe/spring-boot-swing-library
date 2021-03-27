@@ -28,7 +28,8 @@ public class JButtonComponentContainer implements IJComponentContainer {
 
   @Override
   public Map<String, JComponent> getJComponentsFromContainer() {
-    return buttonsIndexed.entrySet().stream()
+    return buttonsIndexed
+      .entrySet().stream()
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getComponent()));
   }
 
@@ -43,9 +44,7 @@ public class JButtonComponentContainer implements IJComponentContainer {
   public AbstractButton addToContainer(String property, Dimension dimension, Position position, IJComponentType type) {
     var text = messageLibrary.getMessage(property);
     var buttonComponent = JButtonComponentType.buildByType(text, dimension, (JButtonComponentType) type);
-    var buttonComponentIndexed = JComponentIndexed.builder()
-      .component(buttonComponent)
-      .position(position).build();
+    var buttonComponentIndexed = JComponentIndexed.builder().component(buttonComponent).position(position).build();
     buttonsIndexed.put(property, buttonComponentIndexed);
     return buttonComponent;
   }

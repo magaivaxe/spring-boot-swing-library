@@ -31,7 +31,8 @@ public class JMenusContainer {
 
   public Set<JComponent> getAllParentsBuilded() {
     var menusBuilded = menus.values().stream()
-      .map(JMenuComponent::buildAtParent).collect(Collectors.toCollection(LinkedHashSet::new));
+                            .map(JMenuComponent::buildAtParent)
+                            .collect(Collectors.toCollection(LinkedHashSet::new));
     menus.clear();
     return menusBuilded;
   }

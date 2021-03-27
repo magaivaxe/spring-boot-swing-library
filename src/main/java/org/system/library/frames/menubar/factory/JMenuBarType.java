@@ -27,13 +27,14 @@ public enum JMenuBarType {
 
   public abstract JMenuBar build(JMenusContainer menus, JMenuBeansContainer listenersContainer);
 
-  public static JMenuBar buildMenuBarByType(JMenuBarType type, JMenusContainer menus, JMenuBeansContainer listenersContainer) {
+  public static JMenuBar buildMenuBarByType(JMenuBarType type, JMenusContainer menus,
+                                            JMenuBeansContainer listenersContainer) {
     return type.build(menus, listenersContainer);
   }
 
   void buildSettingsMenu(JMenusContainer menus, JMenuBeansContainer beansContainer) {
     var language = menus.addToContainer("menu.settings", JMenuComponentType.MENU)
-      .addChildReturnChild(menus.buildChild("menu.language", JMenuComponentType.MENU));
+                        .addChildReturnChild(menus.buildChild("menu.language", JMenuComponentType.MENU));
 
     var languageEn = (JRadioButtonMenuItem) menus.buildChild("menu.language.en", JMenuComponentType.MENU_ITEM_RADIO);
     var languageFr = (JRadioButtonMenuItem) menus.buildChild("menu.language.fr", JMenuComponentType.MENU_ITEM_RADIO);
@@ -51,7 +52,8 @@ public enum JMenuBarType {
   void buildLibraryMenu(JMenusContainer menus, JMenuBeansContainer beansContainer) {
     var library = menus.addToContainer("menu.library", JMenuComponentType.MENU);
     var aboutItem = (JMenuItem) library
-      .addChildReturnChild(menus.buildChild("menu.item.about", JMenuComponentType.MENU_ITEM)).getParentComponent();
+      .addChildReturnChild(menus.buildChild("menu.item.about", JMenuComponentType.MENU_ITEM))
+      .getParentComponent();
     library.addChildReturnParent(menus.buildChild("", JMenuComponentType.SEPARATOR));
     var quitItem = (JMenuItem) library
       .addChildReturnChild(menus.buildChild("menu.item.quit", JMenuComponentType.MENU_ITEM)).getParentComponent();
