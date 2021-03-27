@@ -100,7 +100,7 @@ public class LoginFrame extends JFrame implements IJFrame {
       JLabelComponentType.LABEL);
     labelContainer.addToContainer("application.password", null, Position.THREE,
       JLabelComponentType.LABEL);
-    labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer()); //TODO: see if setLabel works, keys from text and labels components
+    labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer());
   }
 
   private void buildTextFieldsBodyPanel() {
