@@ -8,6 +8,7 @@ import org.system.library.configuration.messages.MessageLibrary;
 
 import javax.swing.*;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class JMenusContainer {
 
   public Set<JComponent> getAllParentsBuilded() {
     var menusBuilded = menus.values().stream()
-      .map(JMenuComponent::buildAtParent).collect(Collectors.toUnmodifiableSet());
+      .map(JMenuComponent::buildAtParent).collect(Collectors.toCollection(LinkedHashSet::new));
     menus.clear();
     return menusBuilded;
   }
