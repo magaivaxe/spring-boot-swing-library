@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 @RequiredArgsConstructor
-public enum JTextComponentType implements IJComponentType<JComponent> {
+public enum TextFieldBuilder implements ComponentBuilder<JComponent> {
   TEXT_FIELD {
     @Override
     public JTextField buildComponent(String name, Dimension dimension) {

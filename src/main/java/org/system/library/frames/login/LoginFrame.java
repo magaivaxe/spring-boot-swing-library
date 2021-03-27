@@ -5,13 +5,13 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
-import org.system.library.frames.IJFrame;
+import org.system.library.frames.IFrames;
 import org.system.library.frames.component.Position;
-import org.system.library.frames.component.builder.JButtonComponentType;
-import org.system.library.frames.component.builder.JLabelComponentType;
-import org.system.library.frames.component.builder.JPanelComponentType;
-import org.system.library.frames.component.builder.JTextComponentType;
-import org.system.library.frames.component.container.JComponentContainer;
+import org.system.library.frames.component.builder.AbstractButtonBuilder;
+import org.system.library.frames.component.builder.LabelBuilder;
+import org.system.library.frames.component.builder.PanelBuilder;
+import org.system.library.frames.component.builder.TextFieldBuilder;
+import org.system.library.frames.component.container.ComponentContainer;
 import org.system.library.frames.menubar.factory.JMenuBarBuilder;
 import org.system.library.frames.menubar.factory.JMenuBarType;
 import org.system.library.frames.utils.SpringLayoutUtils;
@@ -23,14 +23,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-public class LoginFrame extends JFrame implements IJFrame {
+public class LoginFrame extends JFrame implements IFrames {
 
   private final MessageLibrary message;
   private final JMenuBarBuilder menuBarBuilder;
-  private final JComponentContainer<JComponent> textComponentContainer;
-  private final JComponentContainer<AbstractButton> buttonContainer;
-  private final JComponentContainer<JPanel> panelContainer;
-  private final JComponentContainer<JLabel> labelContainer;
+  private final ComponentContainer<JComponent> textComponentContainer;
+  private final ComponentContainer<AbstractButton> buttonContainer;
+  private final ComponentContainer<JPanel> panelContainer;
+  private final ComponentContainer<JLabel> labelContainer;
 
   @PostConstruct
   private void build() {
@@ -45,7 +45,7 @@ public class LoginFrame extends JFrame implements IJFrame {
     var panelHeader = panelContainer.addToContainer("panelHeader",
                                                     HEADER_DIMENSION,
                                                     Position.ONE,
-                                                    JPanelComponentType.GRID_BAG_LAYOUT);
+                                                    PanelBuilder.GRID_BAG_LAYOUT);
     setComponentsHeaderPanel(panelHeader);
   }
 
@@ -53,7 +53,7 @@ public class LoginFrame extends JFrame implements IJFrame {
     var labelHeader = labelContainer.addToContainer("loginframe.panel.title",
                                                     null,
                                                     Position.ONE,
-                                                    JLabelComponentType.LABEL);
+                                                    LabelBuilder.LABEL);
     labelHeader.setAlignmentY(java.awt.Component.CENTER_ALIGNMENT);
     addComponentsByPosition(panelHeader, List.of(labelContainer.getJComponentsIndexed()));
   }
@@ -62,7 +62,7 @@ public class LoginFrame extends JFrame implements IJFrame {
     var panelLink = panelContainer.addToContainer("panelLink",
                                                   LINK_DIMENSION,
                                                   Position.THREE,
-                                                  JPanelComponentType.BOX_LAYOUT);
+                                                  PanelBuilder.BOX_LAYOUT);
     setComponentsLinkPanel(panelLink);
   }
 
@@ -70,10 +70,10 @@ public class LoginFrame extends JFrame implements IJFrame {
     var passwordForgoten = buttonContainer.addToContainer("loginframe.passwordforgoten",
                                                           LINK_DIMENSION,
                                                           Position.ONE,
-                                                          JButtonComponentType.BUTTON_HYPER_LINK);
+                                                          AbstractButtonBuilder.BUTTON_HYPER_LINK);
     var createAccount = buttonContainer.addToContainer("loginframe.create.account",
                                                        LINK_DIMENSION, Position.TWO,
-                                                       JButtonComponentType.BUTTON_HYPER_LINK);
+                                                       AbstractButtonBuilder.BUTTON_HYPER_LINK);
     passwordForgoten.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
     createAccount.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
     addComponentsByPosition(panelLink, List.of(buttonContainer.getJComponentsIndexed()));
@@ -83,7 +83,7 @@ public class LoginFrame extends JFrame implements IJFrame {
     var panelFooter = panelContainer.addToContainer("panelFooter",
                                                     HEADER_DIMENSION,
                                                     Position.FOUR,
-                                                    JPanelComponentType.GRID_BAG_LAYOUT);
+                                                    PanelBuilder.GRID_BAG_LAYOUT);
     setComponentsFooterPanel(panelFooter);
   }
 
@@ -91,12 +91,12 @@ public class LoginFrame extends JFrame implements IJFrame {
     buttonContainer.addToContainer("loginframe.button.connect",
                                    BUTTON_DIMENSION,
                                    Position.ONE,
-                                   JButtonComponentType.BUTTON);
+                                   AbstractButtonBuilder.BUTTON);
     addComponentsByPosition(panelFooter, List.of(buttonContainer.getJComponentsIndexed()));
   }
 
   private void buildBodyPanel() {
-    var panelBody = panelContainer.addToContainer("panelBody", null, Position.TWO, JPanelComponentType.SPRING_LAYOUT);
+    var panelBody = panelContainer.addToContainer("panelBody", null, Position.TWO, PanelBuilder.SPRING_LAYOUT);
     buildTextFieldsBodyPanel();
     buildLabelsBodyPanel();
     buildBodyLayoutPanel(panelBody);
@@ -110,8 +110,8 @@ public class LoginFrame extends JFrame implements IJFrame {
   }
 
   private void buildLabelsBodyPanel() {
-    labelContainer.addToContainer("application.user", null, Position.ONE, JLabelComponentType.LABEL);
-    labelContainer.addToContainer("application.password", null, Position.THREE, JLabelComponentType.LABEL);
+    labelContainer.addToContainer("application.user", null, Position.ONE, LabelBuilder.LABEL);
+    labelContainer.addToContainer("application.password", null, Position.THREE, LabelBuilder.LABEL);
 //    labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer()); //TODO: see this and check correction
   }
 
@@ -119,11 +119,11 @@ public class LoginFrame extends JFrame implements IJFrame {
     textComponentContainer.addToContainer("application.user",
                                           LOGIN_TEXT_FIELD_DIMENSION,
                                           Position.TWO,
-                                          JTextComponentType.TEXT_FIELD);
+                                          TextFieldBuilder.TEXT_FIELD);
     textComponentContainer.addToContainer("application.password",
                                           LOGIN_TEXT_FIELD_DIMENSION,
                                           Position.FOUR,
-                                          JTextComponentType.PASSWORD_FIELD);
+                                          TextFieldBuilder.PASSWORD_FIELD);
   }
 
   private void buildFrame() {

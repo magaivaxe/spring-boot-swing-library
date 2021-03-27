@@ -1,6 +1,6 @@
 package org.system.library.frames;
 
-import org.system.library.frames.component.IJComponentIndexed;
+import org.system.library.frames.component.IComponentIndexed;
 import org.system.library.frames.utils.IDebugUtils;
 
 import javax.swing.*;
@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface IJFrame extends IDebugUtils {
+public interface IFrames extends IDebugUtils {
 
   int DEFAULT_PADDING = 20;
   Component CENTER_POSITION = null;
@@ -23,10 +23,10 @@ public interface IJFrame extends IDebugUtils {
   Color LINK_VISITED = new Color(128, 0, 128);
 
   default void addComponentsByPosition(Container panel,
-                                       List<List<IJComponentIndexed<? extends JComponent>>> listsJComponents) {
+                                       List<List<IComponentIndexed<? extends JComponent>>> listsJComponents) {
     var mergedOrderedList = listsJComponents.stream()
                                             .flatMap(List::stream)
-                                            .sorted(Comparator.comparing(IJComponentIndexed::getPosition))
+                                            .sorted(Comparator.comparing(IComponentIndexed::getPosition))
                                             .collect(Collectors.toList());
 
     mergedOrderedList.forEach(component -> {

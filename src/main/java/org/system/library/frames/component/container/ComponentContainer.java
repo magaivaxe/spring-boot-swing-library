@@ -5,10 +5,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
-import org.system.library.frames.component.IJComponentIndexed;
-import org.system.library.frames.component.JComponentIndexed;
+import org.system.library.frames.component.IComponentIndexed;
 import org.system.library.frames.component.Position;
-import org.system.library.frames.component.builder.IJComponentType;
+import org.system.library.frames.component.builder.ComponentBuilder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,13 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+//TODO: to Document container implementation with explication and possibilities
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class JComponentContainer<COMPONENT> implements IJComponentContainer<COMPONENT> {
+public class ComponentContainer<COMPONENT> implements IComponentContainer<COMPONENT> {
 
   private final MessageLibrary messageLibrary;
-  private final Map<String, IJComponentIndexed<? extends JComponent>> componentsIndexed = new HashMap<>();
+  private final Map<String, IComponentIndexed<? extends JComponent>> componentsIndexed = new HashMap<>();
 
 
   @Override
@@ -35,7 +36,7 @@ public class JComponentContainer<COMPONENT> implements IJComponentContainer<COMP
   }
 
   @Override
-  public List<IJComponentIndexed<? extends JComponent>> getJComponentsIndexed() {
+  public List<IComponentIndexed<? extends JComponent>> getJComponentsIndexed() {
     var components = List.copyOf(componentsIndexed.values());
     componentsIndexed.clear();
     return components;
@@ -44,14 +45,11 @@ public class JComponentContainer<COMPONENT> implements IJComponentContainer<COMP
 
   @Override
   public COMPONENT addToContainer(String property, Dimension dimension, Position position,
-                                  IJComponentType<COMPONENT> type) {
+                                  ComponentBuilder<COMPONENT> type) {
     var text = messageLibrary.getMessage(property);
     var component = type.buildComponent(text, dimension);
-    var buttonComponentIndexed = JComponentIndexed.builder()
-                                                  .component((JComponent) component)
-                                                  .position(position)
-                                                  .build();
-    componentsIndexed.put(property, buttonComponentIndexed);
+    var componentIndexed = buildComponentIndexed(component, position);
+    componentsIndexed.put(property, componentIndexed);
     return component;
   }
 

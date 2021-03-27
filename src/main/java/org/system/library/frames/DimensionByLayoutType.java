@@ -16,13 +16,13 @@ public enum DimensionByLayoutType {
     public Dimension dimensionByType(Container parentContainer) {
       var childComponents = List.of(parentContainer.getComponents());
       var width = new AtomicInteger(0);
-      var height = new AtomicInteger(IJFrame.DEFAULT_PADDING);
+      var height = new AtomicInteger(IFrames.DEFAULT_PADDING);
 
       childComponents.forEach(child -> {
         width.set(Math.max(width.get(), child.getWidth()));
-        height.set(Math.addExact(height.get(), child.getHeight() + IJFrame.DEFAULT_PADDING));
+        height.set(Math.addExact(height.get(), child.getHeight() + IFrames.DEFAULT_PADDING));
       });
-      width.set(width.addAndGet(2 * IJFrame.DEFAULT_PADDING));
+      width.set(width.addAndGet(2 * IFrames.DEFAULT_PADDING));
       return new Dimension(width.get(), height.get());
     }
   };

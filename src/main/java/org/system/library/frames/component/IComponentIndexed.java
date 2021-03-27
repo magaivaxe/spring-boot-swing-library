@@ -1,6 +1,6 @@
 package org.system.library.frames.component;
 
-public interface IJComponentIndexed<COMPONENT> {
+public interface IComponentIndexed<COMPONENT> {
 
   COMPONENT getComponent();
 

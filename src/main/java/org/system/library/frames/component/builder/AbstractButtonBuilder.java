@@ -1,6 +1,6 @@
 package org.system.library.frames.component.builder;
 
-import org.system.library.frames.IJFrame;
+import org.system.library.frames.IFrames;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
 import java.util.Map;
 
-public enum JButtonComponentType implements IJComponentType<AbstractButton> {
+public enum AbstractButtonBuilder implements ComponentBuilder<AbstractButton> {
 
   BUTTON {
     @Override
@@ -32,7 +32,7 @@ public enum JButtonComponentType implements IJComponentType<AbstractButton> {
     button.setOpaque(false);
     button.setBorderPainted(false);
     button.setHorizontalAlignment(SwingConstants.CENTER);
-    button.setForeground(IJFrame.LINK_UNVISITED);
+    button.setForeground(IFrames.LINK_UNVISITED);
     button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     button.addMouseListener(new DefaultMouseHyperLinkListener());
   }

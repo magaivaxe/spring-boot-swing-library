@@ -5,7 +5,7 @@ import lombok.Builder;
 import javax.swing.*;
 
 @Builder
-public class JComponentIndexed implements IJComponentIndexed {
+public class ComponentIndexed implements IComponentIndexed {
   private final JComponent component;
   private final Position position;
 

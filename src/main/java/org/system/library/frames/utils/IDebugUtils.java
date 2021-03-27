@@ -1,6 +1,6 @@
 package org.system.library.frames.utils;
 
-import org.system.library.frames.component.IJComponentIndexed;
+import org.system.library.frames.component.IComponentIndexed;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -9,7 +9,7 @@ import java.lang.management.ManagementFactory;
 
 public interface IDebugUtils {
 
-  default void setBorderIfRunDebug(IJComponentIndexed<? extends JComponent> component) {
+  default void setBorderIfRunDebug(IComponentIndexed<? extends JComponent> component) {
     if (isDebugMode()) {
       component.getComponent().setBorder(new LineBorder(Color.BLACK, 1));
     }

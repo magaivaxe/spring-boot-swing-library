@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
-import org.system.library.frames.IJFrame;
+import org.system.library.frames.IFrames;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
@@ -13,7 +13,7 @@ import javax.swing.*;
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class PasswordForgoten extends JFrame implements IJFrame {
+public class PasswordForgoten extends JFrame implements IFrames {
 
   private final MessageLibrary message;
   private final JTextComponentContainer textComponentContainer;
