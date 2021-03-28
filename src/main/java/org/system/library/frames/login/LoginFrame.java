@@ -5,13 +5,14 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.configuration.messages.MessageLibrary;
-import org.system.library.frames.IFrames;
+import org.system.library.frames.IFrame;
 import org.system.library.frames.component.Position;
 import org.system.library.frames.component.builder.AbstractButtonBuilder;
 import org.system.library.frames.component.builder.LabelBuilder;
 import org.system.library.frames.component.builder.PanelBuilder;
 import org.system.library.frames.component.builder.TextFieldBuilder;
 import org.system.library.frames.component.container.ComponentContainer;
+import org.system.library.frames.component.container.IComponentContainer;
 import org.system.library.frames.menubar.factory.JMenuBarBuilder;
 import org.system.library.frames.menubar.factory.JMenuBarType;
 import org.system.library.frames.utils.SpringLayoutUtils;
@@ -23,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
-public class LoginFrame extends JFrame implements IFrames {
+public class LoginFrame extends JFrame implements IFrame {
 
   private final MessageLibrary message;
   private final JMenuBarBuilder menuBarBuilder;
@@ -55,7 +56,7 @@ public class LoginFrame extends JFrame implements IFrames {
                                                     Position.ONE,
                                                     LabelBuilder.LABEL);
     labelHeader.setAlignmentY(java.awt.Component.CENTER_ALIGNMENT);
-    addComponentsByPosition(panelHeader, List.of(labelContainer.getJComponentsIndexed()));
+    addComponentsByPosition(panelHeader, List.of(labelContainer.getAllAndClear()));
   }
 
   private void buildLinkPanel() {
@@ -76,7 +77,7 @@ public class LoginFrame extends JFrame implements IFrames {
                                                        AbstractButtonBuilder.BUTTON_HYPER_LINK);
     passwordForgoten.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
     createAccount.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
-    addComponentsByPosition(panelLink, List.of(buttonContainer.getJComponentsIndexed()));
+    addComponentsByPosition(panelLink, List.of(buttonContainer.getAllAndClear()));
   }
 
   private void buildFooterPanel() {
@@ -92,7 +93,7 @@ public class LoginFrame extends JFrame implements IFrames {
                                    BUTTON_DIMENSION,
                                    Position.ONE,
                                    AbstractButtonBuilder.BUTTON);
-    addComponentsByPosition(panelFooter, List.of(buttonContainer.getJComponentsIndexed()));
+    addComponentsByPosition(panelFooter, List.of(buttonContainer.getAllAndClear()));
   }
 
   private void buildBodyPanel() {
@@ -104,15 +105,15 @@ public class LoginFrame extends JFrame implements IFrames {
 
   private void buildBodyLayoutPanel(JPanel panelBody) {
     addComponentsByPosition(panelBody,
-                            List.of(textComponentContainer.getJComponentsIndexed(),
-                                    labelContainer.getJComponentsIndexed()));
+                            List.of(textComponentContainer.getAllAndClear(),
+                                    labelContainer.getAllAndClear()));
     SpringLayoutUtils.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING, DEFAULT_PADDING);
   }
 
   private void buildLabelsBodyPanel() {
     labelContainer.addToContainer("application.user", null, Position.ONE, LabelBuilder.LABEL);
     labelContainer.addToContainer("application.password", null, Position.THREE, LabelBuilder.LABEL);
-//    labelContainer.setLabelFor(textComponentContainer.getJComponentsFromContainer()); //TODO: see this and check correction
+    IComponentContainer.setLabelFor(labelContainer.getAllNotIndexed(), textComponentContainer.getAllNotIndexed());
   }
 
   private void buildTextFieldsBodyPanel() {
@@ -136,7 +137,7 @@ public class LoginFrame extends JFrame implements IFrames {
   private void setLayoutFrame() {
     var mainPane = getContentPane();
     setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
-    addComponentsByPosition(mainPane, List.of(panelContainer.getJComponentsIndexed()));
+    addComponentsByPosition(mainPane, List.of(panelContainer.getAllAndClear()));
 
     setSize(setDimensionBySizeComponents(mainPane));
     setDefaultLookAndFeelDecorated(true);

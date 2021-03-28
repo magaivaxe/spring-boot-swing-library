@@ -1,6 +1,6 @@
 package org.system.library.frames.component.builder;
 
-import org.system.library.frames.IFrames;
+import org.system.library.frames.IFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +32,7 @@ public enum AbstractButtonBuilder implements ComponentBuilder<AbstractButton> {
     button.setOpaque(false);
     button.setBorderPainted(false);
     button.setHorizontalAlignment(SwingConstants.CENTER);
-    button.setForeground(IFrames.LINK_UNVISITED);
+    button.setForeground(IFrame.LINK_UNVISITED);
     button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     button.addMouseListener(new DefaultMouseHyperLinkListener());
   }

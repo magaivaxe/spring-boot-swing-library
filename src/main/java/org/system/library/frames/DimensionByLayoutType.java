@@ -16,13 +16,13 @@ public enum DimensionByLayoutType {
     public Dimension dimensionByType(Container parentContainer) {
       var childComponents = List.of(parentContainer.getComponents());
       var width = new AtomicInteger(0);
-      var height = new AtomicInteger(IFrames.DEFAULT_PADDING);
+      var height = new AtomicInteger(IFrame.DEFAULT_PADDING);
 
       childComponents.forEach(child -> {
         width.set(Math.max(width.get(), child.getWidth()));
-        height.set(Math.addExact(height.get(), child.getHeight() + IFrames.DEFAULT_PADDING));
+        height.set(Math.addExact(height.get(), child.getHeight() + IFrame.DEFAULT_PADDING));
       });
-      width.set(width.addAndGet(2 * IFrames.DEFAULT_PADDING));
+      width.set(width.addAndGet(2 * IFrame.DEFAULT_PADDING));
       return new Dimension(width.get(), height.get());
     }
   };
@@ -31,6 +31,15 @@ public enum DimensionByLayoutType {
 
   public abstract Dimension dimensionByType(Container parentContainer);
 
+  /**
+   * Build a new parent dimension based on parent {@link LayoutManager} and children {@link Dimension}.
+   * <p></p>
+   * {@link #BOX_LAYOUT} -> {@link BoxLayout}
+   * <ul>
+   *  <li>{@code returned} {@link Dimension#width} set by the <b>MAX</b> width among children widths.</li>
+   *  <li>{@code returned} {@link Dimension#height} set by the <b>SUM</b> of children heights.</li>
+   * </ul>
+   */
   public static Dimension buildDimensionByLayoutType(Container parentContainer) {
     var dimensionLayoutType = Arrays.stream(DimensionByLayoutType.values())
                                     .filter(checkLayoutType(parentContainer))
