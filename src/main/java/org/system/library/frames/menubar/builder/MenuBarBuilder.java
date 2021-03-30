@@ -1,7 +1,7 @@
 package org.system.library.frames.menubar.builder;
 
 import org.system.library.frames.menubar.MenuContainer;
-import org.system.library.frames.menubar.listeners.MenuBeansContainer;
+import org.system.library.frames.menubar.listener.MenuBeansContainer;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

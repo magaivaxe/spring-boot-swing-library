@@ -1,4 +1,4 @@
-package org.system.library.frames.menubar.listeners;
+package org.system.library.frames.menubar.listener;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

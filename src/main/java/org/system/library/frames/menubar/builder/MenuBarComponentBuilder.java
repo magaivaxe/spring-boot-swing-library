@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.system.library.frames.menubar.MenuContainer;
-import org.system.library.frames.menubar.listeners.MenuBeansContainer;
+import org.system.library.frames.menubar.listener.MenuBeansContainer;
 
 import javax.swing.*;
 
