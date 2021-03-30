@@ -1,8 +1,8 @@
 package org.system.library.frames;
 
 import org.system.library.frames.component.IComponentIndexed;
-import org.system.library.frames.utils.DimensionByLayoutType;
-import org.system.library.frames.utils.IDebugUtils;
+import org.system.library.frames.component.utils.DimensionByLayoutType;
+import org.system.library.frames.component.utils.IDebugUtils;
 
 import javax.swing.*;
 import java.awt.*;

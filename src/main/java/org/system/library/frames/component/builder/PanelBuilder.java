@@ -1,6 +1,6 @@
 package org.system.library.frames.component.builder;
 
-import org.system.library.frames.utils.SpringLayoutUtils;
+import org.system.library.frames.component.utils.SpringLayoutUtils;
 
 import javax.swing.*;
 import java.awt.*;

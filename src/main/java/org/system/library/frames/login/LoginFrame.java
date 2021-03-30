@@ -15,7 +15,7 @@ import org.system.library.frames.component.container.ComponentContainer;
 import org.system.library.frames.component.container.IComponentContainer;
 import org.system.library.frames.menubar.builder.MenuBarComponentBuilder;
 import org.system.library.frames.menubar.builder.MenuBarBuilder;
-import org.system.library.frames.utils.SpringLayoutUtils;
+import org.system.library.frames.component.utils.SpringLayoutUtils;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;

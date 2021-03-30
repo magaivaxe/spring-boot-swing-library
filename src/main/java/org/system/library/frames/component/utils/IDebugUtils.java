@@ -1,4 +1,4 @@
-package org.system.library.frames.utils;
+package org.system.library.frames.component.utils;
 
 import org.system.library.frames.component.IComponentIndexed;
 
