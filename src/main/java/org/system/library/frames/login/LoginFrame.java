@@ -13,8 +13,8 @@ import org.system.library.frames.component.builder.PanelBuilder;
 import org.system.library.frames.component.builder.TextFieldBuilder;
 import org.system.library.frames.component.container.ComponentContainer;
 import org.system.library.frames.component.container.IComponentContainer;
-import org.system.library.frames.menubar.factory.JMenuBarBuilder;
-import org.system.library.frames.menubar.factory.JMenuBarType;
+import org.system.library.frames.menubar.builder.MenuBarComponentBuilder;
+import org.system.library.frames.menubar.builder.MenuBarBuilder;
 import org.system.library.frames.utils.SpringLayoutUtils;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +27,7 @@ import java.util.List;
 public class LoginFrame extends JFrame implements IFrame {
 
   private final MessageLibrary message;
-  private final JMenuBarBuilder menuBarBuilder;
+  private final MenuBarComponentBuilder menuBarBuilder;
   private final ComponentContainer<JComponent> textComponentContainer;
   private final ComponentContainer<AbstractButton> buttonContainer;
   private final ComponentContainer<JPanel> panelContainer;
@@ -130,7 +130,7 @@ public class LoginFrame extends JFrame implements IFrame {
   private void buildFrame() {
     setTitle(message.getMessage("loginframe.title"));
     setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setJMenuBar(menuBarBuilder.buildMenuBarByType(JMenuBarType.LOGIN_FRAME));
+    setJMenuBar(menuBarBuilder.buildMenuBarByType(MenuBarBuilder.LOGIN_FRAME));
     setLayoutFrame();
   }
 

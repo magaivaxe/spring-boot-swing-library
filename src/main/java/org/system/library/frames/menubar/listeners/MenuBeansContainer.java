@@ -12,7 +12,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class JMenuBeansContainer {
+public class MenuBeansContainer {
 
   private final QuitListener quitListener;
   private final AboutListener aboutListener;

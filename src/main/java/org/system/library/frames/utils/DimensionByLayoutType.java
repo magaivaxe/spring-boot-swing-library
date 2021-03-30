@@ -1,6 +1,7 @@
-package org.system.library.frames;
+package org.system.library.frames.utils;
 
 import lombok.RequiredArgsConstructor;
+import org.system.library.frames.IFrame;
 
 import javax.swing.*;
 import java.awt.*;

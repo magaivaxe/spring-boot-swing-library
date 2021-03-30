@@ -1,6 +1,7 @@
 package org.system.library.frames;
 
 import org.system.library.frames.component.IComponentIndexed;
+import org.system.library.frames.utils.DimensionByLayoutType;
 import org.system.library.frames.utils.IDebugUtils;
 
 import javax.swing.*;

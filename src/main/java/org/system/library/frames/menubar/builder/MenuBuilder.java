@@ -1,8 +1,8 @@
-package org.system.library.frames.menubar;
+package org.system.library.frames.menubar.builder;
 
 import javax.swing.*;
 
-public enum JMenuComponentType {
+public enum MenuBuilder {
   MENU {
     @Override
     public JMenu build(String text) {
@@ -36,7 +36,7 @@ public enum JMenuComponentType {
 
   abstract public JComponent build(String text);
 
-  public static JComponent buildByType(String text, JMenuComponentType type) {
+  public static JComponent buildByType(String text, MenuBuilder type) {
     return type.build(text);
   }
 }
