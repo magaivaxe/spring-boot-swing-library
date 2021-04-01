@@ -14,13 +14,14 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * Container class used to contains a specific component type.
  *
- * @param <COMPONENT> type that this container contains. The <b>{@code <COMPONENT>}</b> value must be the same implemented by
- *                    {@link ComponentBuilder} enum implementation.
+ * @param <COMPONENT> type that this container contains. The <b>{@code <COMPONENT>}</b> value must be the same
+ *                    implemented by {@link ComponentBuilder} enum implementation.
  *                    <p></p>
  *                    <p>Possible values as illustrated below. List not exhaustive.</p>
  *                    <ul>
@@ -41,23 +42,33 @@ import java.util.stream.Collectors;
 public class ComponentContainer<COMPONENT> implements IComponentContainer<COMPONENT> {
 
   private final MessageLibrary messageLibrary;
-  private final Map<String, IComponentIndexed<? extends JComponent>> componentsIndexed = new HashMap<>();
+  // Map<property, anyComponent>
+  private final Map<String, IComponentIndexed<? extends JComponent>> components = new HashMap<>();
+  // Map<parentName, <property, anyComponent>>
+  private final Map<String, Map<String, IComponentIndexed<? extends JComponent>>> componentsByParent = new HashMap<>();
 
 
   @Override
   public Map<String, ? extends JComponent> getAllNotIndexed() {
-    return componentsIndexed
+    return components
       .entrySet().stream()
+      .filter(checkComponentNameNotBlank())
       .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getComponent()));
+  }
 
+  /**
+   * Exclusion of components without name, as void labels.
+   */
+  private Predicate<Map.Entry<String, IComponentIndexed<? extends JComponent>>> checkComponentNameNotBlank() {
+    return entry -> !entry.getValue().getComponent().getName().isBlank();
   }
 
   @Override
-  public List<IComponentIndexed<? extends JComponent>> getAllAndClear() {
-    var components = List.copyOf(componentsIndexed.values());
-    componentsIndexed.clear();
-    return components;
-
+  public List<IComponentIndexed<? extends JComponent>> getAllAndClear(String parentName) {
+    var componentsIndexed = List.copyOf(this.components.values());
+    componentsByParent.put(parentName, Map.copyOf(components));
+    components.clear();
+    return componentsIndexed;
   }
 
   @Override
@@ -66,12 +77,27 @@ public class ComponentContainer<COMPONENT> implements IComponentContainer<COMPON
     var text = messageLibrary.getMessage(property);
     var component = type.buildComponent(text, dimension);
     var componentIndexed = buildComponentIndexed(component, position);
-    componentsIndexed.put(property, componentIndexed);
+    components.put(property, componentIndexed);
     return component;
   }
 
   @Override
   public COMPONENT getComponentFromContainer(String key) {
-    return (COMPONENT) componentsIndexed.get(key).getComponent();
+    return (COMPONENT) components.get(key).getComponent();
+  }
+
+  @Override
+  public COMPONENT getComponentFromParent(String parentName, String childProperty) {
+    return (COMPONENT) componentsByParent.get(parentName).get(childProperty).getComponent();
+  }
+
+  @Override
+  public Map<String, ? extends JComponent> getAllFromParent(String parentName) {
+    var components = componentsByParent.get(parentName)
+                                       .entrySet()
+                                       .stream()
+                                       .collect(Collectors.toMap(Map.Entry::getKey,
+                                                                 entry -> entry.getValue().getComponent()));
+    return Map.copyOf(components);
   }
 }

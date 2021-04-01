@@ -1,7 +1,7 @@
 -- spring security
 CREATE TABLE users (
     username VARCHAR(100) NOT NULL PRIMARY KEY,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     enabled BOOLEAN NOT NULL
 );
 

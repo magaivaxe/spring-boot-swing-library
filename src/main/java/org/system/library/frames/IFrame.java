@@ -13,6 +13,10 @@ import java.util.stream.Collectors;
 public interface IFrame extends IDebugUtils {
 
   int DEFAULT_PADDING = 20;
+  int FORM_PADDING = 5;
+
+  String VOID_LABEL = "void";
+
   Component CENTER_POSITION = null;
 
   Dimension BUTTON_DIMENSION = new Dimension(50, 20);

@@ -14,7 +14,7 @@ public interface IComponentContainer<COMPONENT> {
 
   Map<String, ? extends JComponent> getAllNotIndexed();
 
-  List<IComponentIndexed<? extends JComponent>> getAllAndClear();
+  List<IComponentIndexed<? extends JComponent>> getAllAndClear(String parentName);
 
   /**
    * Add a component to container defined by <b>{@code COMPONENT}</b> implements.
@@ -27,6 +27,10 @@ public interface IComponentContainer<COMPONENT> {
   COMPONENT addToContainer(String property, Dimension dimension, Position position, ComponentBuilder<COMPONENT> type);
 
   COMPONENT getComponentFromContainer(String key);
+
+  COMPONENT getComponentFromParent(String parentName, String childProperty);
+
+  Map<String, ? extends JComponent> getAllFromParent(String parentName);
 
   default IComponentIndexed<? extends JComponent> buildComponentIndexed(COMPONENT component, Position position) {
     return ComponentIndexed.builder()

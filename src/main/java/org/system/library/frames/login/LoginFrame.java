@@ -1,10 +1,16 @@
 package org.system.library.frames.login;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.system.library.business.model.UserLibrary;
 import org.system.library.configuration.messages.MessageLibrary;
+import org.system.library.frames.Dialogs;
 import org.system.library.frames.IFrame;
 import org.system.library.frames.component.Position;
 import org.system.library.frames.component.builder.AbstractButtonBuilder;
@@ -13,14 +19,17 @@ import org.system.library.frames.component.builder.PanelBuilder;
 import org.system.library.frames.component.builder.TextFieldBuilder;
 import org.system.library.frames.component.container.ComponentContainer;
 import org.system.library.frames.component.container.IComponentContainer;
-import org.system.library.frames.menubar.builder.MenuBarComponentBuilder;
-import org.system.library.frames.menubar.builder.MenuBarBuilder;
 import org.system.library.frames.component.utils.SpringLayoutUtils;
+import org.system.library.frames.menubar.builder.MenuBarBuilder;
+import org.system.library.frames.menubar.builder.MenuBarComponentBuilder;
+import org.system.library.services.LoginService;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
+import java.nio.CharBuffer;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 @Scope(value = BeanDefinition.SCOPE_PROTOTYPE)
@@ -33,6 +42,12 @@ public class LoginFrame extends JFrame implements IFrame {
   private final ComponentContainer<JPanel> panelContainer;
   private final ComponentContainer<JLabel> labelContainer;
 
+  private final ApplicationContext applicationContext;
+  private final LoginService loginService;
+  private final PasswordEncoder passwordEncoder;
+  private final Dialogs dialogs;
+  private final UserLibrary userLibraryBean;
+
   @PostConstruct
   private void build() {
     buildHeaderPanel();
@@ -40,6 +55,7 @@ public class LoginFrame extends JFrame implements IFrame {
     buildLinkPanel();
     buildFooterPanel();
     buildFrame();
+    setListeners();
   }
 
   private void buildHeaderPanel() {
@@ -56,7 +72,7 @@ public class LoginFrame extends JFrame implements IFrame {
                                                     Position.ONE,
                                                     LabelBuilder.LABEL);
     labelHeader.setAlignmentY(java.awt.Component.CENTER_ALIGNMENT);
-    addComponentsByPosition(panelHeader, List.of(labelContainer.getAllAndClear()));
+    addComponentsByPosition(panelHeader, List.of(labelContainer.getAllAndClear(panelHeader.getName())));
   }
 
   private void buildLinkPanel() {
@@ -68,7 +84,7 @@ public class LoginFrame extends JFrame implements IFrame {
   }
 
   private void setComponentsLinkPanel(JPanel panelLink) {
-    var passwordForgoten = buttonContainer.addToContainer("loginframe.passwordforgoten",
+    var passwordForgoten = buttonContainer.addToContainer("loginframe.user.password.forgotten",
                                                           LINK_DIMENSION,
                                                           Position.ONE,
                                                           AbstractButtonBuilder.BUTTON_HYPER_LINK);
@@ -77,7 +93,7 @@ public class LoginFrame extends JFrame implements IFrame {
                                                        AbstractButtonBuilder.BUTTON_HYPER_LINK);
     passwordForgoten.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
     createAccount.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
-    addComponentsByPosition(panelLink, List.of(buttonContainer.getAllAndClear()));
+    addComponentsByPosition(panelLink, List.of(buttonContainer.getAllAndClear(panelLink.getName())));
   }
 
   private void buildFooterPanel() {
@@ -93,7 +109,7 @@ public class LoginFrame extends JFrame implements IFrame {
                                    BUTTON_DIMENSION,
                                    Position.ONE,
                                    AbstractButtonBuilder.BUTTON);
-    addComponentsByPosition(panelFooter, List.of(buttonContainer.getAllAndClear()));
+    addComponentsByPosition(panelFooter, List.of(buttonContainer.getAllAndClear(panelFooter.getName())));
   }
 
   private void buildBodyPanel() {
@@ -101,19 +117,6 @@ public class LoginFrame extends JFrame implements IFrame {
     buildTextFieldsBodyPanel();
     buildLabelsBodyPanel();
     buildBodyLayoutPanel(panelBody);
-  }
-
-  private void buildBodyLayoutPanel(JPanel panelBody) {
-    addComponentsByPosition(panelBody,
-                            List.of(textComponentContainer.getAllAndClear(),
-                                    labelContainer.getAllAndClear()));
-    SpringLayoutUtils.makeCompactGrid(panelBody, 2, 2, 0, 0, DEFAULT_PADDING, DEFAULT_PADDING);
-  }
-
-  private void buildLabelsBodyPanel() {
-    labelContainer.addToContainer("application.user", null, Position.ONE, LabelBuilder.LABEL);
-    labelContainer.addToContainer("application.password", null, Position.THREE, LabelBuilder.LABEL);
-    IComponentContainer.setLabelFor(labelContainer.getAllNotIndexed(), textComponentContainer.getAllNotIndexed());
   }
 
   private void buildTextFieldsBodyPanel() {
@@ -127,6 +130,19 @@ public class LoginFrame extends JFrame implements IFrame {
                                           TextFieldBuilder.PASSWORD_FIELD);
   }
 
+  private void buildLabelsBodyPanel() {
+    labelContainer.addToContainer("application.user", null, Position.ONE, LabelBuilder.LABEL);
+    labelContainer.addToContainer("application.password", null, Position.THREE, LabelBuilder.LABEL);
+    IComponentContainer.setLabelFor(labelContainer.getAllNotIndexed(), textComponentContainer.getAllNotIndexed());
+  }
+
+  private void buildBodyLayoutPanel(JPanel panelBody) {
+    addComponentsByPosition(panelBody,
+                            List.of(textComponentContainer.getAllAndClear(panelBody.getName()),
+                                    labelContainer.getAllAndClear(panelBody.getName())));
+    SpringLayoutUtils.makeCompactGrid(panelBody, 2, 2, 0, 0, FORM_PADDING, FORM_PADDING);
+  }
+
   private void buildFrame() {
     setTitle(message.getMessage("loginframe.title"));
     setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -137,7 +153,7 @@ public class LoginFrame extends JFrame implements IFrame {
   private void setLayoutFrame() {
     var mainPane = getContentPane();
     setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
-    addComponentsByPosition(mainPane, List.of(panelContainer.getAllAndClear()));
+    addComponentsByPosition(mainPane, List.of(panelContainer.getAllAndClear("mainPane")));
 
     setSize(setDimensionBySizeComponents(mainPane));
     setDefaultLookAndFeelDecorated(true);
@@ -147,5 +163,37 @@ public class LoginFrame extends JFrame implements IFrame {
 
 
   public void setListeners() {
+    var passwordForgoten = buttonContainer.getComponentFromParent("panelLink",
+                                                                  "loginframe.user.password.forgotten");
+    var create = buttonContainer.getComponentFromParent("panelLink",
+                                                        "loginframe.create.account");
+
+    connectionListener();
+  }
+
+  private void connectionListener() {
+    var connection = buttonContainer.getComponentFromParent("panelFooter",
+                                                            "loginframe.button.connect");
+    connection.addActionListener((event) -> {
+      final var textFields = textComponentContainer.getAllFromParent("panelBody");
+      final var username = ((JTextField) textFields.get("application.user")).getText();
+      final var password = ((JPasswordField) textFields.get("application.password")).getPassword();
+
+      var userLibrary = UserLibrary.builder().build();
+      try {
+        userLibrary = loginService.loadUserByUsername(username);
+      } catch (UsernameNotFoundException e) {
+        dialogs.dialogErrorMessage(this, "dialog.error.login");
+        return;
+      }
+
+      if (passwordEncoder.matches(CharBuffer.wrap(password), userLibrary.getPasswordEncoded())) {
+        var userBean = applicationContext.getBean(UserLibrary.class);
+        userBean.update(userLibrary);
+        //TODO: inject next window
+      } else {
+        dialogs.dialogErrorMessage(this, "dialog.error.login");
+      }
+    });
   }
 }

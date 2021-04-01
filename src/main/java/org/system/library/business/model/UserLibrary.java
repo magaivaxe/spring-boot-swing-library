@@ -1,9 +1,6 @@
 package org.system.library.business.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,6 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 public class UserLibrary implements UserDetails {
 
@@ -20,6 +18,12 @@ public class UserLibrary implements UserDetails {
   private Boolean enabled;
   private Set<UserLibraryAuthorities> authorities;
 
+  public void update(UserLibrary userLibrary) {
+    username = userLibrary.username;
+    passwordEncoded = userLibrary.passwordEncoded;
+    enabled = userLibrary.enabled;
+    authorities = userLibrary.authorities;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
