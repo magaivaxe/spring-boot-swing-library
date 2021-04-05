@@ -6,9 +6,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.system.library.business.model.UserLibrary;
+import org.system.library.business.validations.UserLibraryValidations;
 import org.system.library.configuration.messages.MessageLibrary;
 import org.system.library.frames.Dialogs;
 import org.system.library.frames.IFrame;
@@ -26,7 +26,6 @@ import org.system.library.services.LoginService;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
-import java.nio.CharBuffer;
 import java.util.List;
 
 @Slf4j
@@ -44,9 +43,8 @@ public class LoginFrame extends JFrame implements IFrame {
 
   private final ApplicationContext applicationContext;
   private final LoginService loginService;
-  private final PasswordEncoder passwordEncoder;
   private final Dialogs dialogs;
-  private final UserLibrary userLibraryBean;
+  private final UserLibraryValidations userValidations;
 
   @PostConstruct
   private void build() {
@@ -121,11 +119,11 @@ public class LoginFrame extends JFrame implements IFrame {
 
   private void buildTextFieldsBodyPanel() {
     textComponentContainer.addToContainer("application.user",
-                                          LOGIN_TEXT_FIELD_DIMENSION,
+                                          TEXT_FIELD_DIMENSION,
                                           Position.TWO,
                                           TextFieldBuilder.TEXT_FIELD);
     textComponentContainer.addToContainer("application.password",
-                                          LOGIN_TEXT_FIELD_DIMENSION,
+                                          TEXT_FIELD_DIMENSION,
                                           Position.FOUR,
                                           TextFieldBuilder.PASSWORD_FIELD);
   }
@@ -163,12 +161,19 @@ public class LoginFrame extends JFrame implements IFrame {
 
 
   public void setListeners() {
-    var passwordForgoten = buttonContainer.getComponentFromParent("panelLink",
-                                                                  "loginframe.user.password.forgotten");
+    passwordForgottenListener();
+    createUserListener();
+    connectionListener();
+  }
+
+  private void passwordForgottenListener() {
+    var passwordForgotten = buttonContainer.getComponentFromParent("panelLink",
+                                                                   "loginframe.user.password.forgotten");
+  }
+
+  private void createUserListener() {
     var create = buttonContainer.getComponentFromParent("panelLink",
                                                         "loginframe.create.account");
-
-    connectionListener();
   }
 
   private void connectionListener() {
@@ -179,21 +184,23 @@ public class LoginFrame extends JFrame implements IFrame {
       final var username = ((JTextField) textFields.get("application.user")).getText();
       final var password = ((JPasswordField) textFields.get("application.password")).getPassword();
 
-      var userLibrary = UserLibrary.builder().build();
       try {
-        userLibrary = loginService.loadUserByUsername(username);
+        final var userLibrary = loginService.loadUserByUsername(username);
+        passwordEvent(username, password, userLibrary);
       } catch (UsernameNotFoundException e) {
-        dialogs.dialogErrorMessage(this, "dialog.error.login");
-        return;
-      }
-
-      if (passwordEncoder.matches(CharBuffer.wrap(password), userLibrary.getPasswordEncoded())) {
-        var userBean = applicationContext.getBean(UserLibrary.class);
-        userBean.update(userLibrary);
-        //TODO: inject next window
-      } else {
         dialogs.dialogErrorMessage(this, "dialog.error.login");
       }
     });
+  }
+
+  private void passwordEvent(String username, char[] password, UserLibrary userLibrary) throws
+                                                                                        UsernameNotFoundException {
+    if (userValidations.passwordMatcher(password, userLibrary.getPasswordEncoded())) {
+      var userBean = applicationContext.getBean(UserLibrary.class);
+      userBean.update(userLibrary);
+      //TODO: inject next window -> HOME dashboard
+    } else {
+      throw new UsernameNotFoundException(username);
+    }
   }
 }

@@ -42,7 +42,14 @@ public enum PanelBuilder implements ComponentBuilder<JPanel> {
       var panel = buildPanel(name, dimension);
       panel.setLayout(new GridBagLayout());
       return panel;
-
+    }
+  },
+  GROUP_LAYOUT {
+    @Override
+    public JPanel buildComponent(String name, Dimension dimension) {
+      var panel = buildPanel(name, dimension);
+      panel.setLayout(new GroupLayout(panel));
+      return panel;
     }
   };
 

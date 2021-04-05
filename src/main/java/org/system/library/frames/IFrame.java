@@ -22,7 +22,8 @@ public interface IFrame extends IDebugUtils {
   Dimension BUTTON_DIMENSION = new Dimension(50, 20);
   Dimension HEADER_DIMENSION = new Dimension(400, 2 * DEFAULT_PADDING);
   Dimension LINK_DIMENSION = new Dimension(0, DEFAULT_PADDING);
-  Dimension LOGIN_TEXT_FIELD_DIMENSION = new Dimension(200, DEFAULT_PADDING);
+  Dimension FIELD_AND_BUTTON_DIMENSION = new Dimension(400, 3 * DEFAULT_PADDING);
+  Dimension TEXT_FIELD_DIMENSION = new Dimension(200, DEFAULT_PADDING);
 
   Color LINK_UNVISITED = new Color(0, 102, 204);
   Color LINK_VISITED = new Color(128, 0, 128);
